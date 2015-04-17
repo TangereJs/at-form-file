@@ -1,6 +1,7 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../at-core-theme/at-core-theme.html" />
-<script src="at-form-file.js"></script>
+<link rel="import" href="../layout/layout.html" />
+<link rel="import" href="../at-carbon-icon/at-carbon-icon.html" />
 
 <!--
 A better `<input type="file">`.
@@ -29,28 +30,31 @@ that all of your HTML imports are concatenated into one file.__
       position: relative;
     }
     
-    #fileInputInput {
-      bottom: 0;
-      height: 100%;
-      left: 0;
-      margin: 0;
-      opacity: 0;
+    #buttonDiv {
       padding: 0;
-      position: absolute;
-      right: 0;
-      top: 0;
-      width: inherit;
+      width: 15%;
+    }
+    
+    #aciIcon {
+      vertical-align: middle;
+    }
+    
+    #buttonText {
+      vertical-align: middle;
     }
   </style>
   <template>
     <at-core-theme></at-core-theme>
-
     <div class="ui form">
       <div id="fileDiv" class="field">
         <label>{{label}}</label>
-        <div id="fileLabel" class="ui labeled icon button error" on-click="fileLabelClickHandler">
-          <i class="file icon"></i>
-          <content></content>
+        <div class="horizontal layout">
+          <div class="ui input">
+            <input id="fileName" type="text" disabled />
+          </div>
+          <div id="buttonDiv" class="ui button" on-click="selectFileClickHandler">
+            <at-carbon-icon id="aciIcon" icon="{{icon}}"></at-carbon-icon><span id="buttonText">Select a file</span>
+          </div>
         </div>
       </div>
     </div>
@@ -63,7 +67,11 @@ that all of your HTML imports are concatenated into one file.__
     properties: {
       label: {
         type: String,
-        value: ''
+        value: 'Demo label'
+      },
+      icon: {
+        type: String,
+        value: 'picture'
       },
       accept: {
         type: String,
@@ -98,7 +106,7 @@ that all of your HTML imports are concatenated into one file.__
           valid: []
         },
         notify: true,
-        observer: 'valueChanged'
+        readOnly: true
       },
       valid: {
         type: Boolean,
@@ -118,7 +126,7 @@ that all of your HTML imports are concatenated into one file.__
     _scopeCssViaAttr: true,
     _isReady: false,
 
-    fileLabelClickHandler: function () {
+    selectFileClickHandler: function () {
       var clickEvent = document.createEvent('HTMLEvents');
       clickEvent.initEvent('click', false, false);
       this.$.fileInputInput.dispatchEvent(clickEvent);
@@ -162,7 +170,16 @@ that all of your HTML imports are concatenated into one file.__
         invalid: invalid,
         valid: valid
       };
-      this.value = newValue;
+      this._setValue(newValue);
+
+      if (this.value.valid.length > 0) {
+        var selectedFile = this.value.valid[0];
+        this.$.fileName.value = selectedFile.name;
+      } else {
+        this.$.fileName.value = '';
+      }
+
+      this.validate();
     },
 
     created: function () {
@@ -174,7 +191,7 @@ that all of your HTML imports are concatenated into one file.__
     },
 
     ready: function () {
-      if (this.maxFiles !== 1) {
+      if (this.maxFiles > 1) {
         this.$.fileInputInput.setAttribute("multiple", "");
       }
 
@@ -185,19 +202,19 @@ that all of your HTML imports are concatenated into one file.__
       this._isReady = true;
     },
 
-    valueChanged: function (newValue, oldValue) {
-      this._updateValidState();
-    },
-
     _updateValidState: function () {
-      this.valid = this.required && this.value.valid.length > 0;
+      if (this.required) {
+        this.valid = this.value.valid.length > 0;
+      } else {
+        this.valid = true;
+      }
     },
 
     validate: function () {
       this._updateValidState();
 
       this.toggleClass('error', !this.valid, this.$.fileDiv);
-      
+
       return this.valid;
     },
 
@@ -228,8 +245,7 @@ that all of your HTML imports are concatenated into one file.__
     },
 
     disabledChanged: function (newValue, oldValue) {
-      this.toggleClass('disabled', this.disabled, this.$.fileLabel);
-      this.toggleClass('disabled', this.disabled, this.$.fileDiv);
+      this.toggleClass('disabled', this.disabled, this.$.buttonDiv);
     },
 
     _getResultOfExtensionsValidation: function (extensionsStr, files) {
