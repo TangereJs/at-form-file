@@ -31,12 +31,7 @@ that all of your HTML imports are concatenated into one file.__
     }
     
     #buttonDiv {
-      padding: 0;
-      width: 15%;
-    }
-    
-    #aciIcon {
-      vertical-align: middle;
+      font-size: 0.8rem;
     }
     
     #buttonText {
@@ -49,23 +44,16 @@ that all of your HTML imports are concatenated into one file.__
       <div id="fileDiv" class="field">
         <label>{{label}}</label>
         <div class="horizontal layout">
-          <div class="ui input">
-            <input id="fileName" type="text" disabled />
+          <div class="flex">
+            <div class="ui input">
+              <input id="fileName" type="text" disabled />
+            </div>
           </div>
-          <div id="buttonDiv" class="ui button" on-click="selectFileClickHandler">
-            <at-carbon-icon id="aciIcon" icon="{{icon}}"></at-carbon-icon><span id="buttonText">Select a file</span>
+          <div class="horizontal layout center">
+            <div id="buttonDiv" class="ui button" on-click="selectFileClickHandler">
+              <at-carbon-icon id="aciIcon" icon="{{icon}}"></at-carbon-icon><span id="buttonText">Select a file</span>
+            </div>
           </div>
-        </div>
-
-      </div>
-    </div>
-    <div class="ui form">
-      <div class="field">
-        <div class="ui input">
-          <input id="fileName" type="text" disabled />
-        </div>
-        <div class="ui button">
-          <at-carbon-icon id="aciIcon" icon="{{icon}}"></at-carbon-icon><span id="buttonText">Select a file</span>
         </div>
       </div>
     </div>
