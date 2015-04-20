@@ -56,6 +56,17 @@ that all of your HTML imports are concatenated into one file.__
             <at-carbon-icon id="aciIcon" icon="{{icon}}"></at-carbon-icon><span id="buttonText">Select a file</span>
           </div>
         </div>
+
+      </div>
+    </div>
+    <div class="ui form">
+      <div class="field">
+        <div class="ui input">
+          <input id="fileName" type="text" disabled />
+        </div>
+        <div class="ui button">
+          <at-carbon-icon id="aciIcon" icon="{{icon}}"></at-carbon-icon><span id="buttonText">Select a file</span>
+        </div>
       </div>
     </div>
     <input style="display: none" accept$="{{accept}}" id="fileInputInput" on-change="changeHandler" type="file" />
