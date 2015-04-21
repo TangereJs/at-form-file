@@ -30,8 +30,8 @@ that all of your HTML imports are concatenated into one file.__
       position: relative;
     }
     
-    #buttonDiv {
-      font-size: 0.8rem;
+    .inputElem {
+      line-height: 1.8rem;
     }
     
     #buttonText {
@@ -46,7 +46,7 @@ that all of your HTML imports are concatenated into one file.__
         <div class="horizontal layout">
           <div class="flex">
             <div class="ui input">
-              <input id="fileName" type="text" disabled />
+              <input class="inputElem" id="fileName" type="text" disabled />
             </div>
           </div>
           <div class="horizontal layout center">
@@ -161,10 +161,6 @@ that all of your HTML imports are concatenated into one file.__
 
       valid = countLimitValidationResult.valid;
 
-      /* It is unclear whether files and invalidFiles properties should be removed */
-      this.invalidFiles = invalid;
-      this.files = valid;
-
       var newValue = {
         invalid: invalid,
         valid: valid
@@ -181,13 +177,7 @@ that all of your HTML imports are concatenated into one file.__
       this.validate();
     },
 
-    created: function () {
-      /* It is unclear whether files and invalidFiles properties should be removed */
-      this.files = [];
-      this.invalidFiles = {
-        count: 0
-      };
-    },
+    created: function () {},
 
     ready: function () {
       if (this.maxFiles > 1) {
@@ -198,10 +188,19 @@ that all of your HTML imports are concatenated into one file.__
         this.$.fileInputInput.setAttribute("webkitdirectory", "");
       }
 
+      var newValue = {
+        invalid: {
+          count: 0
+        },
+        valid: []
+      };
+      this._setValue(newValue);
+
       this._isReady = true;
     },
 
     _updateValidState: function () {
+      // && this.value ; added this to guard against error that happens when element is validated without first selecting a file
       if (this.required) {
         this.valid = this.value.valid.length > 0;
       } else {
