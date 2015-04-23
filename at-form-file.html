@@ -202,9 +202,9 @@ that all of your HTML imports are concatenated into one file.__
     _updateValidState: function () {
       // && this.value ; added this to guard against error that happens when element is validated without first selecting a file
       if (this.required) {
-        this.valid = this.value.valid.length > 0;
+        this._setValid(this.value.valid.length > 0);
       } else {
-        this.valid = true;
+        this._setValid(true);
       }
     },
 
