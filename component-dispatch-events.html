@@ -167,7 +167,7 @@
       });
     },
     triggerClick: function (element) {
-      var clickEvent = document.createEvent('HTMLEvents');
+      var clickEvent = document.createEvent('MouseEvent');
       clickEvent.initEvent('click', true, true);
       element.dispatchEvent(clickEvent);
     },
@@ -179,7 +179,8 @@
       });
     },
     triggerClickConstructor: function (element) {
-      var clickEvent = new Event('click', {
+      var clickEvent = new MouseEvent('click', {
+        view: window,
         bubbles: true,
         cancelable: true
       });

@@ -57,10 +57,11 @@ that all of your HTML imports are concatenated into one file.__
         </div>
       </div>
     </div>
-    <input style="display: none" accept$="{{accept}}" id="fileInputInput" on-change="changeHandler" type="file" />
+    <input style="visibility: hidden" accept$="{{accept}}" id="fileInputInput" on-change="changeHandler" type="file" />
   </template>
 </dom-module>
 <script>
+  'use strict';
   Polymer({
     is: 'at-form-file',
     properties: {
@@ -124,10 +125,9 @@ that all of your HTML imports are concatenated into one file.__
     },
     _scopeCssViaAttr: true,
     _isReady: false,
-
     selectFileClickHandler: function () {
-      var clickEvent = document.createEvent('HTMLEvents');
-      clickEvent.initEvent('click', false, false);
+      var clickEvent = document.createEvent('MouseEvent');
+      clickEvent.initEvent('click', false, true);
       this.$.fileInputInput.dispatchEvent(clickEvent);
     },
 
