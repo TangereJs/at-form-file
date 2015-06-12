@@ -29,7 +29,7 @@ that all of your HTML imports are concatenated into one file.__
     :host {
       position: relative;
     }
-    
+    /*
     .inputElem {
       line-height: 1.8rem;
     }
@@ -37,23 +37,40 @@ that all of your HTML imports are concatenated into one file.__
     #buttonText {
       vertical-align: middle;
     }
+*/
   </style>
   <template>
     <at-core-theme></at-core-theme>
+    <!-- *ij* This html structure is here in place to show what css styles need to be corrected in at-core-theme -->
+    <!-- when *ma* makes necessary changes, in place style overrides will be removed -->
+    
+    <!-- *ij* This is a case when "ui form" classes are not used -->
+    <!-- this results in a input that doesn't fill the width of the container -->
+    <div id="fileDiv" class="field">
+      <div>
+        <label>{{label}}</label>
+      </div>
+      <div class="ui action input" style="display: inline-flex;">
+        <input class="inputElem" id="fileName" type="text" disabled style="max-width: 100%; width: inherit;" />
+        <button id="buttonDiv" class="ui button" on-click="selectFileClickHandler">
+          <at-carbon-icon id="aciIcon" icon="{{icon}}"></at-carbon-icon>
+          Select a file
+        </button>
+      </div>
+    </div>
+    <!-- *ij* This is a case when "ui form" classes are used -->
+    <!-- this results in a input that does fill the width of the container -->
     <div class="ui form">
       <div id="fileDiv" class="field">
-        <label>{{label}}</label>
-        <div class="horizontal layout">
-          <div class="flex">
-            <div class="ui input">
-              <input class="inputElem" id="fileName" type="text" disabled />
-            </div>
-          </div>
-          <div class="horizontal layout center">
-            <div id="buttonDiv" class="ui button" on-click="selectFileClickHandler">
-              <at-carbon-icon id="aciIcon" icon="{{icon}}"></at-carbon-icon><span id="buttonText">Select a file</span>
-            </div>
-          </div>
+        <div>
+          <label>{{label}}</label>
+        </div>
+        <div class="ui action input" style="display: inline-flex">
+          <input class="inputElem" id="fileName" type="text" disabled />
+          <button id="buttonDiv" class="ui button" on-click="selectFileClickHandler">
+            <at-carbon-icon id="aciIcon" icon="{{icon}}"></at-carbon-icon>
+            Select a file
+          </button>
         </div>
       </div>
     </div>
