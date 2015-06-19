@@ -29,15 +29,14 @@ that all of your HTML imports are concatenated into one file.__
     :host {
       position: relative;
     }
-    /*
-    .inputElem {
-      line-height: 1.8rem;
-    }
-    
-    #buttonText {
+
+    .buttonText {
       vertical-align: middle;
+      white-space: normal;
+      padding-left: 6px;
+      padding-right: 6px;
     }
-*/
+
   </style>
   <template>
     <at-core-theme></at-core-theme>
@@ -51,11 +50,11 @@ that all of your HTML imports are concatenated into one file.__
         <label>{{label}}</label>
       </div>
       <div class="ui action input" style="display: inline-flex;">
-        <input class="inputElem" id="fileName" type="text" disabled style="max-width: 100%; width: inherit;" />
-        <button id="buttonDiv" class="ui button" on-click="selectFileClickHandler">
-          <at-carbon-icon id="aciIcon" icon="{{icon}}"></at-carbon-icon>
-          Select a file
-        </button>
+        <input id="fileName" type="text" readonly>
+        <div id="buttonDiv" class="ui labeled icon button" on-click="selectFileClickHandler">
+          <at-carbon-icon id="aciIcon" class="icon" icon="{{icon}}"></at-carbon-icon>
+          <div class="buttonText">Select a file</div>
+        </div>
       </div>
     </div>
     <!-- *ij* This is a case when "ui form" classes are used -->
@@ -66,11 +65,11 @@ that all of your HTML imports are concatenated into one file.__
           <label>{{label}}</label>
         </div>
         <div class="ui action input" style="display: inline-flex">
-          <input class="inputElem" id="fileName" type="text" disabled />
-          <button id="buttonDiv" class="ui button" on-click="selectFileClickHandler">
-            <at-carbon-icon id="aciIcon" icon="{{icon}}"></at-carbon-icon>
-            Select a file
-          </button>
+          <input id="fileName" type="text" readonly />
+          <div id="buttonDiv" class="ui labeled icon button" on-click="selectFileClickHandler">
+            <at-carbon-icon id="aciIcon" class="icon" icon="{{icon}}"></at-carbon-icon>
+            <div class="buttonText">Select a file</div>
+          </div>
         </div>
       </div>
     </div>
