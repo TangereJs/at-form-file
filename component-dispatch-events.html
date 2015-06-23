@@ -157,13 +157,13 @@
       });
 
       this.$.decVisibleInputTrigger.addEventListener('click', function () {
-        self.fireClick(self.$.decVisibleInput);
+        self.triggerClickConstructor(self.$.decVisibleInput);
       });
       this.$.decHiddenInputTrigger.addEventListener('click', function () {
-        self.fireClick(self.$.decHiddenInput);
+        self.triggerClickConstructor(self.$.decHiddenInput);
       });
       this.$.decNoneInputTrigger.addEventListener('click', function () {
-        self.fireClick(self.$.decNoneInput);
+        self.triggerClickConstructor(self.$.decNoneInput);
       });
     },
     triggerClick: function (element) {
