@@ -42,7 +42,7 @@ that all of your HTML imports are concatenated into one file.__
     <at-core-theme></at-core-theme>
     <!-- *ij* This html structure is here in place to show what css styles need to be corrected in at-core-theme -->
     <!-- when *ma* makes necessary changes, in place style overrides will be removed -->
-    
+
     <!-- *ij* This is a case when "ui form" classes are not used -->
     <!-- this results in a input that doesn't fill the width of the container -->
 <!--
@@ -63,9 +63,7 @@ that all of your HTML imports are concatenated into one file.__
     <!-- this results in a input that does fill the width of the container -->
     <div class="ui form">
       <div id="fileDiv" class="field">
-        <div>
-          <label>{{label}}</label>
-        </div>
+        <label>{{label}}</label>
         <div class="ui action input" style="display: inline-flex">
           <input id="fileName" type="text" readonly />
           <div id="buttonDiv" class="ui labeled icon button" on-click="selectFileClickHandler">
