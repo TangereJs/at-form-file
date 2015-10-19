@@ -39,6 +39,9 @@ that all of your HTML imports are concatenated into one file.__
       margin-right: 30px;
     }
 
+    .hide-label {
+      display: none;
+    }
   </style>
   <template>
     <at-core-theme></at-core-theme>
@@ -64,8 +67,10 @@ that all of your HTML imports are concatenated into one file.__
     <!-- *ij* This is a case when "ui form" classes are used -->
     <!-- this results in a input that does fill the width of the container -->
     <div class="ui form">
-      <div id="fileDiv" class="field">
+      <div class="" id="labelContainer">
         <label>{{label}}</label>
+      </div>
+      <div id="fileDiv" class="field">
         <div class="ui action input" style="display: inline-flex">
           <input id="fileName" type="text" readonly />
           <div id="buttonDiv" class="ui labeled icon button" on-click="selectFileClickHandler">
@@ -85,7 +90,12 @@ that all of your HTML imports are concatenated into one file.__
     properties: {
       label: {
         type: String,
-        value: 'Demo label'
+        value: ''
+      },
+      hideTitle: {
+        type: Boolean,
+        value: false,
+        observer: 'hideTitleChanged'
       },
       icon: {
         type: String,
@@ -148,7 +158,9 @@ that all of your HTML imports are concatenated into one file.__
       clickEvent.initEvent('click', false, true);
       this.$.fileInputInput.dispatchEvent(clickEvent);
     },
-
+    hideTitleChanged: function (newValue, oldValue) {
+      this.toggleClass("hide-label", newValue, this.$.labelContainer);
+    },
     changeHandler: function () {
       var files = Array.prototype.slice.call(this.$.fileInputInput.files),
         invalid = {
