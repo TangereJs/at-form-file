@@ -151,13 +151,11 @@ that all of your HTML imports are concatenated into one file.__
         observer: 'disabledChanged'
       }
     },
-    $meta: {
+    $meta: [{
       title: "File",
-      form: {
-        type: "string",
-        xtype: "file"
-      }
-    },
+      type: "string",
+      xtype: "file"
+    }],
     _scopeCssViaAttr: true,
     _isReady: false,
     selectFileClickHandler: function() {
