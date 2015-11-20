@@ -92,10 +92,10 @@ that all of your HTML imports are concatenated into one file.__
         type: String,
         value: ''
       },
-      hideTitle: {
+      hideLabel: {
         type: Boolean,
         value: false,
-        observer: 'hideTitleChanged'
+        observer: 'hideLabelChanged'
       },
       icon: {
         type: String,
@@ -163,7 +163,7 @@ that all of your HTML imports are concatenated into one file.__
       clickEvent.initEvent('click', false, true);
       this.$.fileInputInput.dispatchEvent(clickEvent);
     },
-    hideTitleChanged: function(newValue, oldValue) {
+    hideLabelChanged: function(newValue, oldValue) {
       this.toggleClass("hide-label", newValue, this.$.labelContainer);
     },
     changeHandler: function() {
