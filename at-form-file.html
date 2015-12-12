@@ -36,6 +36,10 @@ Now, a new, better, evolved (and evolving) element to take its place: `<at-form-
     .hidden {
       display: none;
     }
+
+    #atFormFileWrapper > .ui.form > .labelContainer > .labelContent {
+      font-weight: bold;
+    }
   </style>
   <template>
     <at-core-theme></at-core-theme>
@@ -62,8 +66,8 @@ Now, a new, better, evolved (and evolving) element to take its place: `<at-form-
     <!-- this results in a input that does fill the width of the container -->
     <div id="atFormFileWrapper">
       <div class="ui form">
-        <div class="" id="labelContainer">
-          <label>{{label}}</label>
+        <div class="labelContainer" id="labelContainer">
+          <label class="labelContent">{{label}}</label>
         </div>
         <div id="fileDiv" class="field">
           <div class="ui action input" style="display: inline-flex">
