@@ -24,6 +24,18 @@ Now, a new, better, evolved (and evolving) element to take its place: `<at-form-
       position: relative;
     }
 
+    #atFormFileWrapper > .ui.form > .labelContainer > .labelContent {
+      font-weight: bold;
+    }
+
+    #fileDiv > .ui.action.input > .selectFileButton {
+    }
+
+    #fileDiv > .ui.action.input > .selectFileButton > .selectFileButtonIcon {
+      display: inline-block;
+      vertical-align: middle;
+    }
+
     .buttonText {
       vertical-align: middle;
       white-space: normal;
@@ -37,9 +49,6 @@ Now, a new, better, evolved (and evolving) element to take its place: `<at-form-
       display: none;
     }
 
-    #atFormFileWrapper > .ui.form > .labelContainer > .labelContent {
-      font-weight: bold;
-    }
   </style>
   <template>
     <at-core-theme></at-core-theme>
@@ -72,10 +81,10 @@ Now, a new, better, evolved (and evolving) element to take its place: `<at-form-
         <div id="fileDiv" class="field">
           <div class="ui action input" style="display: inline-flex">
             <input id="fileName" type="text" readonly />
-            <div id="buttonDiv" class="ui labeled icon button" on-click="selectFileClickHandler">
-              <at-carbon-icon id="aciIcon" class="icon" icon="{{icon}}"></at-carbon-icon>
-              <div class="buttonText">Select a file</div>
-            </div>
+            <button type="button" id="buttonDiv" class="selectFileButton ui button" on-click="selectFileClickHandler">
+              <at-carbon-icon id="aciIcon" class="selectFileButtonIcon icon" icon="{{icon}}"></at-carbon-icon>
+              Select a file
+            </button>
           </div>
         </div>
       </div>
