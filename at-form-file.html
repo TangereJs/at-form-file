@@ -186,12 +186,13 @@
        *
        *
        * @property directory
-       * @type String
-       * @default ''
+       * @type Boolean
+       * @default false
        */
       directory: {
-        type: String,
-        value: ''
+        type: Boolean,
+        value: false,
+        observer: 'directoryChanged'
       },
       /**
        * This is a validation property that allows you to filter out any
@@ -228,11 +229,12 @@
        *
        * @property maxFiles
        * @type integer
-       * @default 0
+       * @default 1
        */
       maxFiles: {
         type: Number,
-        value: 0
+        value: 1,
+        observer: 'maxFilesChanged'
       },
       /**
        * Maximum acceptable file size for the purposes of validation.
@@ -318,6 +320,8 @@
     _scopeCssViaAttr: true,
     ready: function() {
       this._isReady = false;
+
+      this._validationFunctions.push(this._validateInternalConstraints.bind(this));
 
       if (this.maxFiles > 1) {
         this.$.fileInputInput.setAttribute("multiple", "");
@@ -432,6 +436,18 @@
       return valid;
     },
 
+    _validateInternalConstraints: function (value) {
+      var result = true;
+
+      result = result && value.invalid.count === 0;
+
+      if (!result) {
+        this._errorMessage = 'Value is invalid';
+      }
+
+      return result;
+    },
+
     /**
      * To reset the `files` and `invalidFiles` cache on your element,
      * use the `reset()` function:
@@ -445,6 +461,30 @@
     },
     created: function() {
       // *ij* I do not understand the purpose of this function
+    },
+
+    maxFilesChanged: function (newValue, oldValue) {
+      try {
+        var value = Number(newValue);
+        var fileInput = this.$.fileInputInput;
+        if (value > 1) {
+          Polymer.dom(fileInput).setAttribute('multiple', '');
+        } else {
+          Polymer.dom(fileInput).removeAttribute('multiple');
+        }
+      } catch (e) {
+
+      }
+    },
+
+    directoryChanged: function (newValue, oldValue) {
+      var fileInput = this.$.fileInputInput;
+      var isWebKitDirectorySupported = this.$.fileInputInput.webkitdirectory !== undefined;
+      if (isWebKitDirectorySupported && newValue) {
+        Polymer.dom(fileInput).setAttribute('webkitdirectory', '');
+      } else {
+        Polymer.dom(fileInput).removeAttribute('webkitdirectory');
+      }
     },
 
     _getLowerCaseExtension: function(filename) {
