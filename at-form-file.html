@@ -2,19 +2,9 @@
 <link rel="import" href="../at-core-theme/at-core-theme.html" />
 <link rel="import" href="../layout/layout.html" />
 <link rel="import" href="../at-carbon-icon/at-carbon-icon.html" />
+<link rel="import" href="../at-form-behaviors/at-form-behaviors-validation.html">
 
 <!--
-A better `<input type="file">`.
-
-### What's wrong with `<input type="file">`?
-
-1. It's difficult to skin/style as the look and feel of the element is mostly determined by the user agent.
-2. Access to the selected files are provided via `FileList` object, which is a pseudo-array (not a "real" array, with useful sugar like `forEach`, etc).
-3. You want any sort of file validation?  Do it yourself!
-4. The API is lacking in many respects.
-
-Now, a new, better, evolved (and evolving) element to take its place: `<at-form-file>`!
-
 @element at-form-file
 -->
 
@@ -24,14 +14,14 @@ Now, a new, better, evolved (and evolving) element to take its place: `<at-form-
       position: relative;
     }
 
-    #atFormFileWrapper > .ui.form > .labelContainer > .labelContent {
+    #atFormFileWrapper > .ui.form > .label-container > .label-content {
       font-weight: bold;
     }
 
-    #fileDiv > .ui.action.input > .selectFileButton {
+    #contentContainer > .ui.action.input > .selectFileButton {
     }
 
-    #fileDiv > .ui.action.input > .selectFileButton > .selectFileButtonIcon {
+    #contentContainer > .ui.action.input > .selectFileButton > .selectFileButtonIcon {
       display: inline-block;
       vertical-align: middle;
     }
@@ -49,6 +39,41 @@ Now, a new, better, evolved (and evolving) element to take its place: `<at-form-
       display: none;
     }
 
+    :host {
+      --error-color: #e41e2b;
+    }
+
+    .label-container {
+      color: #000000;
+    }
+
+    .label-container.error {
+      color: var(--error-color);
+    }
+
+    .hint-container.error {
+      color: var(--error-color);
+    }
+
+    #contentContainer.field {
+      margin: 0;
+    }
+
+    #contentContainer.field.error {
+      margin: 0 0 2px;
+    }
+
+    #contentContainer.field > .ui.action > .ui.button {
+      border-color: var(--error-color);
+    }
+
+    #contentContainer.field.error > .ui.action > .ui.button > span {
+      color: var(--error-color);
+    }
+
+    #contentContainer.field.error > .ui.action > .ui.button > .selectFileButtonIcon {
+      color: var(--error-color);
+    }
   </style>
   <template>
     <at-core-theme></at-core-theme>
@@ -58,7 +83,7 @@ Now, a new, better, evolved (and evolving) element to take its place: `<at-form-
     <!-- *ij* This is a case when "ui form" classes are not used -->
     <!-- this results in a input that doesn't fill the width of the container -->
     <!--
-    <div id="fileDiv" class="field">
+    <div id="contentContainer" class="field">
       <div>
         <label>{{label}}</label>
       </div>
@@ -75,17 +100,20 @@ Now, a new, better, evolved (and evolving) element to take its place: `<at-form-
     <!-- this results in a input that does fill the width of the container -->
     <div id="atFormFileWrapper">
       <div class="ui form">
-        <div class="labelContainer" id="labelContainer">
-          <label class="labelContent">{{label}}</label>
+        <div id="labelContainer" class="label-container">
+          <label class="label-content">{{label}}</label>
         </div>
-        <div id="fileDiv" class="field">
+        <div id="contentContainer" class="field">
           <div class="ui action input" style="display: inline-flex">
             <input id="fileName" type="text" readonly />
             <button type="button" id="buttonDiv" class="selectFileButton ui button" on-click="selectFileClickHandler">
               <at-carbon-icon id="aciIcon" class="selectFileButtonIcon icon" icon="{{icon}}"></at-carbon-icon>
-              Select a file
+              <span>Select a file</span>
             </button>
           </div>
+        </div>
+        <div id="hintContainer" class="hint-container">
+          <p id="errorHtml" class="hint"></p>
         </div>
       </div>
       <input style="visibility: hidden" accept$="{{accept}}" id="fileInputInput" on-change="changeHandler" type="file" />
@@ -96,6 +124,7 @@ Now, a new, better, evolved (and evolving) element to take its place: `<at-form-
   'use strict';
   Polymer({
     is: 'at-form-file',
+    behaviors: [AtFormBehaviors.AtFormBehaviorsValidation],
     properties: {
       /**
        * Label for the element
@@ -248,17 +277,6 @@ Now, a new, better, evolved (and evolving) element to take its place: `<at-form-
         readOnly: true
       },
       /**
-       * Valid state of the element; true = valid, false = invalid
-       * @property valid
-       * @type Boolean
-       * @default true
-       */
-      valid: {
-        type: Boolean,
-        value: true,
-        readOnly: true
-      },
-      /**
        * Required state of the element; true = required, false = optional
        * @property required
        * @type Boolean
@@ -266,7 +284,8 @@ Now, a new, better, evolved (and evolving) element to take its place: `<at-form-
        */
       required: {
         type: Boolean,
-        value: false
+        value: false,
+        observer: 'requiredChanged'
       },
       /**
        * Disabled state of the element; true = disabled, false = enabled
@@ -297,25 +316,39 @@ Now, a new, better, evolved (and evolving) element to take its place: `<at-form-
       xtype: "file"
     }],
     _scopeCssViaAttr: true,
-    _isReady: false,
-    hideChanged: function (newValue, oldValue) {
-      var wrapper = this.$.atFormFileWrapper;
-      this.toggleClass('hidden', newValue, wrapper);
+    ready: function() {
+      this._isReady = false;
+
+      if (this.maxFiles > 1) {
+        this.$.fileInputInput.setAttribute("multiple", "");
+      }
+
+      if (this.directory && this.$.fileInputInput.webkitdirectory !== undefined) {
+        this.$.fileInputInput.setAttribute("webkitdirectory", "");
+      }
+
+      var newValue = {
+        invalid: {
+          count: 0
+        },
+        valid: []
+      };
+      this._setValue(newValue);
+
+      this._isReady = true;
     },
     selectFileClickHandler: function() {
       var clickEvent = document.createEvent('MouseEvent');
       clickEvent.initEvent('click', false, true);
       this.$.fileInputInput.dispatchEvent(clickEvent);
     },
-    hideLabelChanged: function(newValue, oldValue) {
-      this.toggleClass("hidden", newValue, this.$.labelContainer);
-    },
+    set value(newValue) { },
     changeHandler: function() {
       var files = Array.prototype.slice.call(this.$.fileInputInput.files),
-        invalid = {
-          count: 0
-        },
-        valid = [];
+      invalid = {
+        count: 0
+      },
+      valid = [];
 
       var sizeValidationResult = this._getResultOfSizeValidation(this.minSize, this.maxSize, files);
       var extensionValidationResult = this._getResultOfExtensionsValidation(this.extensions, sizeValidationResult.valid);
@@ -355,44 +388,48 @@ Now, a new, better, evolved (and evolving) element to take its place: `<at-form-
 
       this.validate();
     },
-
-    created: function() {},
-
-    ready: function() {
-      if (this.maxFiles > 1) {
-        this.$.fileInputInput.setAttribute("multiple", "");
-      }
-
-      if (this.directory && this.$.fileInputInput.webkitdirectory !== undefined) {
-        this.$.fileInputInput.setAttribute("webkitdirectory", "");
-      }
-
-      var newValue = {
-        invalid: {
-          count: 0
-        },
-        valid: []
-      };
-      this._setValue(newValue);
-
-      this._isReady = true;
+    hideLabelChanged: function(newValue, oldValue) {
+      this.toggleClass("hidden", newValue, this.$.labelContainer);
     },
-
-    _updateValidState: function() {
-      // && this.value ; added this to guard against error that happens when element is validated without first selecting a file
-      if (this.required) {
-        this._setValid(this.value.valid.length > 0);
-      } else {
-        this._setValid(true);
+    hideChanged: function (newValue, oldValue) {
+      var wrapper = this.$.atFormFileWrapper;
+      this.toggleClass('hidden', newValue, wrapper);
+      if (this._isReady) {
+        this.validate();
+      }
+    },
+    requiredChanged: function (newValue, oldValue) {
+      if (this._isReady) {
+        this.validate();
+      }
+    },
+    disabledChanged: function(newValue, oldValue) {
+      this.toggleClass('disabled', newValue, this.$.buttonDiv);
+      if (this._isReady) {
+        this.validate();
       }
     },
 
-    validate: function() {
-      this._updateValidState();
+    _updateUIValidState: function(isValid) {
+      var labelContainer = this.$.labelContainer;
+      this.toggleClass('error', !isValid, labelContainer);
+      var contentContainer = this.$.contentContainer;
+      this.toggleClass('error', !isValid, contentContainer);
+      var hintContainer = this.$.hintContainer;
+      this.toggleClass('error', hintContainer);
+    },
 
-      this.toggleClass('error', !this.valid, this.$.fileDiv);
-
-      return this.valid;
+    _checkRequired: function (value) {
+      // coerce this.required to boolean; if element doesn't have required property,
+      // undefined is coerced to false so final result will be valid = true
+      var required = Boolean(this.required);
+      var valid = !required || (value != undefined && value.valid && value.valid.length > 0);
+      // set the _errorMessage when constraint is not satisfied
+      if (!valid) {
+        this._errorMessage = "This field is required.";
+      }
+      // return result;
+      return valid;
     },
 
     /**
@@ -405,6 +442,9 @@ Now, a new, better, evolved (and evolving) element to take its place: `<at-form-
      */
     reset: function() {
       this.created();
+    },
+    created: function() {
+      // *ij* I do not understand the purpose of this function
     },
 
     _getLowerCaseExtension: function(filename) {
@@ -427,15 +467,6 @@ Now, a new, better, evolved (and evolving) element to take its place: `<at-form-
         invalid: [],
         valid: files
       };
-    },
-
-    disabledChanged: function(newValue, oldValue) {
-      this.toggleClass('disabled', this.disabled, this.$.buttonDiv);
-      if (this.disabled) {
-        this.toggleClass('error', false, this.$.fileDiv);
-      } else {
-        this.toggleClass('error', !this.valid, this.$.fileDiv);
-      }
     },
 
     _getResultOfExtensionsValidation: function(extensionsStr, files) {
