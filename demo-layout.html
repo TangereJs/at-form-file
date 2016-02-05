@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <title>at-form-file layout demo</title>
+
+  <script src="../webcomponentsjs/webcomponents.js"></script>
+  <link rel="import" href="../layout/layout.html">
+  <link rel="import" href="../at-core-theme/at-core-theme.html" />
+
+  <style>
+    div {
+      border: 1px dashed blue;
+    }
+    .w50 {
+      width: 50%;
+    }
+    .input {
+      width: 100%;
+      height: 100px;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <div class="w50">
+    <div class="layout horizontal">
+      <div class="flex">
+        <input class="input" />
+      </div>
+      <div class="horizontal layout center">
+        This text should be vertically aligned
+      </div>
+    </div>
+  </div>
+
+
+</body>
+
+</html>
