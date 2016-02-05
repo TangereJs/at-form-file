@@ -1,5 +1,5 @@
 <link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="../at-core-theme/at-core-theme.html" />
+<link rel="import" href="../at-theme/at-theme.html" />
 <link rel="import" href="../layout/layout.html" />
 <link rel="import" href="../at-carbon-icon/at-carbon-icon.html" />
 <link rel="import" href="../at-form-behaviors/at-form-behaviors-validation.html">
@@ -9,114 +9,135 @@
 -->
 
 <dom-module id="at-form-file">
-  <style>
-    :host {
-      position: relative;
-    }
-
-    #atFormFileWrapper > .ui.form > .label-container > .label-content {
-      font-weight: bold;
-    }
-
-    #contentContainer > .ui.action.input > .selectFileButton {
-    }
-
-    #contentContainer > .ui.action.input > .selectFileButton > .selectFileButtonIcon {
-      display: inline-block;
-      vertical-align: middle;
-    }
-
-    .buttonText {
-      vertical-align: middle;
-      white-space: normal;
-      padding-left: 6px;
-      padding-right: 6px;
-      width: 100px;
-      margin-right: 30px;
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    :host {
-      --error-color: #e41e2b;
-    }
-
-    .label-container {
-      color: #000000;
-    }
-
-    .label-container.error {
-      color: var(--error-color);
-    }
-
-    .hint-container.error {
-      color: var(--error-color);
-    }
-
-    #contentContainer.field {
-      margin: 0;
-    }
-
-    #contentContainer.field.error {
-      margin: 0 0 2px;
-    }
-
-    #contentContainer.field > .ui.action > .ui.button {
-      border-color: var(--error-color);
-    }
-
-    #contentContainer.field.error > .ui.action > .ui.button > span {
-      color: var(--error-color);
-    }
-
-    #contentContainer.field.error > .ui.action > .ui.button > .selectFileButtonIcon {
-      color: var(--error-color);
-    }
-  </style>
   <template>
-    <at-core-theme></at-core-theme>
-    <!-- *ij* This html structure is here in place to show what css styles need to be corrected in at-core-theme -->
-    <!-- when *ma* makes necessary changes, in place style overrides will be removed -->
+    <style>
+      :host * {
+        box-sizing: border-box;
+      }
 
-    <!-- *ij* This is a case when "ui form" classes are not used -->
-    <!-- this results in a input that doesn't fill the width of the container -->
-    <!--
-    <div id="contentContainer" class="field">
-      <div>
-        <label>{{label}}</label>
+      :host {
+        @apply(--at-form-host);
+      }
+
+      #fileName {
+        @apply(--at-form-input-common);
+      }
+
+      #fileName:focus {
+        @apply(--at-form-input-focus);
+      }
+
+      #fileName::-webkit-input-placeholder {
+        @apply(--at-form-input-placeholder);
+      }
+
+      #fileName:-moz-placeholder {
+        /* Mozilla Firefox 4 to 18 */
+        @apply(--at-form-input-placeholder);
+      }
+
+      #fileName::-moz-placeholder {
+        /* Mozilla Firefox 19+ */
+        @apply(--at-form-input-placeholder);
+      }
+
+      #fileName:-ms-input-placeholder {
+        /* Internet Explorer 10-11 */
+        @apply(--at-form-input-placeholder);
+      }
+
+      #contentContainer.error #fileName::-webkit-input-placeholder {
+        @apply(--at-form-input-placeholder-error);
+      }
+
+      #contentContainer.error #fileName:-moz-placeholder {
+        /* Mozilla Firefox 4 to 18 */
+        @apply(--at-form-input-placeholder-error);
+        opacity: 1;
+      }
+
+      #contentContainer.error #fileName::-moz-placeholder {
+        /* Mozilla Firefox 19+ */
+        @apply(--at-form-input-placeholder-error);
+        opacity: 1;
+      }
+
+      #contentContainer.error #fileName:-ms-input-placeholder {
+        /* Internet Explorer 10-11 */
+        @apply(--at-form-input-placeholder-error);
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      .error {
+        color: var(--at-error-color);
+      }
+
+      .disabled {
+        @apply(--at-form-disabled);
+      }
+
+      #atContainer {
+        @apply(--at-form-element);
+      }
+
+      #label {
+        @apply(--at-form-label);
+      }
+
+      #contentContainer.error {
+        @apply(--at-form-error-margins);
+      }
+
+      #contentContainer.error #fileName {
+        @apply(--at-form-content-error);
+      }
+
+      #errorHtml {
+        @apply(--at-form-error-font);
+      }
+
+      #inputContainer {
+        @apply(--layout-horizontal);
+      }
+
+      #selectFileButton {
+        @apply(--layout-horizontal);
+        @apply(--at-form-input-padding);
+        @apply(--at-form-button);
+      }
+
+      #buttonIcon {
+        align-self: center;
+      }
+
+      #selectFileButtonText {
+        align-self: center;
+        margin-left: 2px;
+      }
+    </style>
+
+    <div id="atContainer">
+      <div id="labelContainer">
+        <label id="label">{{label}}</label>
       </div>
-      <div class="ui action input" style="display: inline-flex;">
-        <input id="fileName" type="text" readonly>
-        <div id="buttonDiv" class="ui labeled icon button" on-click="selectFileClickHandler">
-          <at-carbon-icon id="aciIcon" class="icon" icon="{{icon}}"></at-carbon-icon>
-          <div class="buttonText">Select a file</div>
+      <div id="contentContainer">
+        <div id="inputContainer">
+          <input id="fileName" type="text" readonly tabindex="-1" disabled$="{{disabled}}" />
+          <button type="button" id="selectFileButton" on-click="selectFileClickHandler" disabled$="{{disabled}}">
+            <at-carbon-icon id="buttonIcon" icon="{{icon}}"></at-carbon-icon>
+            <span id="selectFileButtonText">Select a file</span>
+          </button>
         </div>
       </div>
-    </div>
--->
-    <!-- *ij* This is a case when "ui form" classes are used -->
-    <!-- this results in a input that does fill the width of the container -->
-    <div id="atFormFileWrapper">
-      <div class="ui form">
-        <div id="labelContainer" class="label-container">
-          <label class="label-content">{{label}}</label>
-        </div>
-        <div id="contentContainer" class="field">
-          <div class="ui action input" style="display: inline-flex">
-            <input id="fileName" type="text" readonly />
-            <button type="button" id="buttonDiv" class="selectFileButton ui button" on-click="selectFileClickHandler">
-              <at-carbon-icon id="aciIcon" class="selectFileButtonIcon icon" icon="{{icon}}"></at-carbon-icon>
-              <span>Select a file</span>
-            </button>
-          </div>
-        </div>
-        <div id="hintContainer" class="hint-container">
-          <p id="errorHtml" class="hint"></p>
-        </div>
+      <div id="hintContainer">
+        <div id="errorHtml"></div>
       </div>
-      <input style="visibility: hidden" accept$="{{accept}}" id="fileInputInput" on-change="changeHandler" type="file" />
+      <div class="hidden">
+        <input style="visibility: hidden" accept$="{{accept}}" id="fileInputInput" on-change="changeHandler" type="file" />
+      </div>
     </div>
   </template>
 </dom-module>
@@ -341,8 +362,8 @@
 
       this._isReady = true;
     },
-    focus: function () {
-      var selectAFileButton = this.$.buttonDiv;
+    focus: function() {
+      var selectAFileButton = this.$.selectFileButton;
       if (selectAFileButton.focus) {
         selectAFileButton.focus();
       }
@@ -352,13 +373,13 @@
       clickEvent.initEvent('click', false, true);
       this.$.fileInputInput.dispatchEvent(clickEvent);
     },
-    set value(newValue) { },
+    set value(newValue) {},
     changeHandler: function() {
       var files = Array.prototype.slice.call(this.$.fileInputInput.files),
-      invalid = {
-        count: 0
-      },
-      valid = [];
+        invalid = {
+          count: 0
+        },
+        valid = [];
 
       var sizeValidationResult = this._getResultOfSizeValidation(this.minSize, this.maxSize, files);
       var extensionValidationResult = this._getResultOfExtensionsValidation(this.extensions, sizeValidationResult.valid);
@@ -401,20 +422,22 @@
     hideLabelChanged: function(newValue, oldValue) {
       this.toggleClass("hidden", newValue, this.$.labelContainer);
     },
-    hideChanged: function (newValue, oldValue) {
-      var wrapper = this.$.atFormFileWrapper;
+    hideChanged: function(newValue, oldValue) {
+      var wrapper = this.$.atContainer;
       this.toggleClass('hidden', newValue, wrapper);
       if (this._isReady) {
         this.validate();
       }
     },
-    requiredChanged: function (newValue, oldValue) {
+    requiredChanged: function(newValue, oldValue) {
       if (this._isReady) {
         this.validate();
       }
     },
     disabledChanged: function(newValue, oldValue) {
-      this.toggleClass('disabled', newValue, this.$.buttonDiv);
+      this.toggleClass('disabled', newValue, this.$.selectFileButton);
+      var atContainer = this.$.atContainer;
+      this.toggleClass('disabled', newValue, atContainer);
       if (this._isReady) {
         this.validate();
       }
@@ -426,10 +449,10 @@
       var contentContainer = this.$.contentContainer;
       this.toggleClass('error', !isValid, contentContainer);
       var hintContainer = this.$.hintContainer;
-      this.toggleClass('error', hintContainer);
+      this.toggleClass('error', !isValid, hintContainer);
     },
 
-    _checkRequired: function (value) {
+    _checkRequired: function(value) {
       // coerce this.required to boolean; if element doesn't have required property,
       // undefined is coerced to false so final result will be valid = true
       var required = Boolean(this.required);
@@ -442,7 +465,7 @@
       return valid;
     },
 
-    _validateInternalConstraints: function (value) {
+    _validateInternalConstraints: function(value) {
       var result = true;
 
       result = result && value.invalid.count === 0;
@@ -469,7 +492,7 @@
       // *ij* I do not understand the purpose of this function
     },
 
-    maxFilesChanged: function (newValue, oldValue) {
+    maxFilesChanged: function(newValue, oldValue) {
       try {
         var value = Number(newValue);
         var fileInput = this.$.fileInputInput;
@@ -483,7 +506,7 @@
       }
     },
 
-    directoryChanged: function (newValue, oldValue) {
+    directoryChanged: function(newValue, oldValue) {
       var fileInput = this.$.fileInputInput;
       var isWebKitDirectorySupported = this.$.fileInputInput.webkitdirectory !== undefined;
       if (isWebKitDirectorySupported && newValue) {
