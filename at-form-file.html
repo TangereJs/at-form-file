@@ -426,7 +426,7 @@
       var contentContainer = this.$.contentContainer;
       this.toggleClass('error', !isValid, contentContainer);
       var hintContainer = this.$.hintContainer;
-      this.toggleClass('error', hintContainer);
+      this.toggleClass('error', !isValid, hintContainer);
     },
 
     _checkRequired: function (value) {
