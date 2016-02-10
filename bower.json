@@ -5,8 +5,8 @@
   "dependencies": {
     "polymer": "Polymer/polymer#0.8-preview",
     "at-theme": "TangereJs/at-theme#0.8-preview",
-    "layout": "Polymer/layout#0.8-preview",
     "at-carbon-icon": "TangereJs/at-carbon-icon#0.8-preview",
-    "at-form-behaviors": "TangereJs/at-form-behaviors#0.8-preview"
+    "at-form-behaviors": "TangereJs/at-form-behaviors#0.8-preview",
+    "iron-label": "PolymerElement/iron-label#master"
   }
 }

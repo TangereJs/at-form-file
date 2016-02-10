@@ -1,8 +1,8 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../at-theme/at-theme.html" />
-<link rel="import" href="../layout/layout.html" />
 <link rel="import" href="../at-carbon-icon/at-carbon-icon.html" />
 <link rel="import" href="../at-form-behaviors/at-form-behaviors-validation.html">
+<link rel="import" href="../iron-label/iron-label.html">
 
 <!--
 @element at-form-file
@@ -10,6 +10,7 @@
 
 <dom-module id="at-form-file">
   <template>
+    <style include="at-form-common"></style>
     <style>
       :host * {
         box-sizing: border-box;
@@ -19,123 +20,26 @@
         @apply(--at-form-host);
       }
 
-      #fileName {
-        @apply(--at-form-input-common);
-      }
-
-      #fileName:focus {
-        @apply(--at-form-input-focus);
-      }
-
-      #fileName::-webkit-input-placeholder {
-        @apply(--at-form-input-placeholder);
-      }
-
-      #fileName:-moz-placeholder {
-        /* Mozilla Firefox 4 to 18 */
-        @apply(--at-form-input-placeholder);
-      }
-
-      #fileName::-moz-placeholder {
-        /* Mozilla Firefox 19+ */
-        @apply(--at-form-input-placeholder);
-      }
-
-      #fileName:-ms-input-placeholder {
-        /* Internet Explorer 10-11 */
-        @apply(--at-form-input-placeholder);
-      }
-
-      #contentContainer.error #fileName::-webkit-input-placeholder {
-        @apply(--at-form-input-placeholder-error);
-      }
-
-      #contentContainer.error #fileName:-moz-placeholder {
-        /* Mozilla Firefox 4 to 18 */
-        @apply(--at-form-input-placeholder-error);
-        opacity: 1;
-      }
-
-      #contentContainer.error #fileName::-moz-placeholder {
-        /* Mozilla Firefox 19+ */
-        @apply(--at-form-input-placeholder-error);
-        opacity: 1;
-      }
-
-      #contentContainer.error #fileName:-ms-input-placeholder {
-        /* Internet Explorer 10-11 */
-        @apply(--at-form-input-placeholder-error);
-      }
-
-      .hidden {
-        display: none;
-      }
-
-      .error {
-        color: var(--at-error-color);
-      }
-
-      .disabled {
-        @apply(--at-form-disabled);
-      }
-
-      #atContainer {
-        @apply(--at-form-element);
-      }
-
-      #label {
-        @apply(--at-form-label);
-      }
-
-      #contentContainer.error {
-        @apply(--at-form-error-margins);
-      }
-
-      #contentContainer.error #fileName {
-        @apply(--at-form-content-error);
-      }
-
-      #errorHtml {
-        @apply(--at-form-error-font);
-      }
-
-      #inputContainer {
-        @apply(--layout-horizontal);
-      }
-
-      #selectFileButton {
-        @apply(--layout-horizontal);
-        @apply(--at-form-input-padding);
-        @apply(--at-form-button);
-        width: 170px;
-      }
-
       #buttonIcon {
-        align-self: center;
+        flex: none;
       }
 
-      #selectFileButtonText {
-        align-self: center;
+      #buttonIconText {
+        flex: none;
         margin-left: 2px;
       }
     </style>
 
-    <div id="atContainer">
-      <div id="labelContainer">
-        <label id="label">{{label}}</label>
+    <div id="atContainer" class="at-container">
+      <iron-label id="label">{{label}}</iron-label>
+      <div id="contentContainer" class="at-content-container input-group">
+        <input id="fileName" class="at-content has-placeholder" type="text" readonly tabindex="-1" disabled$="{{disabled}}" />
+        <var type="button" id="selectFileButton" class="input-group-addon" on-click="selectFileClickHandler" disabled$="{{disabled}}">
+          <at-carbon-icon id="buttonIcon" icon="{{icon}}"></at-carbon-icon>
+          <span id="buttonIconText">Select a file</span>
+        </var>
       </div>
-      <div id="contentContainer">
-        <div id="inputContainer">
-          <input id="fileName" type="text" readonly tabindex="-1" disabled$="{{disabled}}" />
-          <button type="button" id="selectFileButton" on-click="selectFileClickHandler" disabled$="{{disabled}}">
-            <at-carbon-icon id="buttonIcon" icon="{{icon}}"></at-carbon-icon>
-            <span id="selectFileButtonText">Select a file</span>
-          </button>
-        </div>
-      </div>
-      <div id="hintContainer">
-        <div id="errorHtml"></div>
-      </div>
+      <div id="hint"></div>
       <div class="hidden">
         <input style="visibility: hidden" accept$="{{accept}}" id="fileInputInput" on-change="changeHandler" type="file" />
       </div>
@@ -421,7 +325,7 @@
       this.validate();
     },
     hideLabelChanged: function(newValue, oldValue) {
-      this.toggleClass("hidden", newValue, this.$.labelContainer);
+      this.toggleClass("hidden", newValue, this.$.label);
     },
     hideChanged: function(newValue, oldValue) {
       var wrapper = this.$.atContainer;
@@ -445,12 +349,12 @@
     },
 
     _updateUIValidState: function(isValid) {
-      var labelContainer = this.$.labelContainer;
-      this.toggleClass('error', !isValid, labelContainer);
+      var label = this.$.label;
+      this.toggleClass('error', !isValid, label);
       var contentContainer = this.$.contentContainer;
       this.toggleClass('error', !isValid, contentContainer);
-      var hintContainer = this.$.hintContainer;
-      this.toggleClass('error', !isValid, hintContainer);
+      var hint = this.$.hint;
+      this.toggleClass('error', !isValid, hint);
     },
 
     _checkRequired: function(value) {
