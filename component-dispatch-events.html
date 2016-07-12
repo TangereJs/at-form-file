@@ -1,4 +1,4 @@
-<link rel="import" href="../at-core-theme/at-core-theme.html">
+<link rel="import" href="../at-theme/at-theme.html">
 <link rel="import" href="../layout/layout.html">
 
 <dom-module id="component-dispatch-events">
@@ -6,7 +6,7 @@
     .hidden {
       visibility: hidden;
     }
-    
+
     .none {
       display: none;
     }
@@ -133,7 +133,6 @@
   'use strict';
   Polymer({
     is: 'component-dispatch-events',
-    _scopeCssViaAttr: true,
     ready: function () {
       var self = this;
       this.$.deVisibleInputTrigger.addEventListener('click', function () {
