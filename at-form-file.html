@@ -179,14 +179,16 @@
       value: {
         type: Object,
         value: function () {
-          return {
-            invalid: {
-              count: 0
-            },
-            valid: []
-          };
+            return {
+                invalid: {
+                    count: 0
+                },
+                valid: [],
+                current: [],
+                deleted: []
+            };
         },
-        readOnly: true,
+        observer: 'valueChanged',
         title: 'Value'
       },
 
@@ -195,8 +197,7 @@
         value: function () {
           return [];
         },
-        readOnly: true,
-        notify: true
+        readOnly: true
       },
       /**
        * Required state of the element; true = required, false = optional
@@ -235,11 +236,49 @@
         title: 'Field is invisible'
       }
     },
+
     $meta: [{
       title: "File",
       type: "string",
       xtype: "file"
     }],
+
+    valueChanged: function (newValue, oldValue) {
+        console.log("at-form-file value change detected");
+        //We'll use this requred properties list, so we can fill up any possible missing properties
+        var requiredValueProperties = ["invalid", "valid", "current", "deleted"];
+        var self = this;
+
+        if (!oldValue) {
+            oldValue = {};
+        }
+
+        if(newValue){
+            //First pop all the propertis already contained in the newValue
+            Object.keys(newValue).forEach(function (propertyName) {
+                if (newValue.hasOwnProperty(propertyName)) {
+                    var index = requiredValueProperties.indexOf(propertyName);
+                    if (index > -1) {
+                        requiredValueProperties.splice(index, 1);
+                    }
+                }
+            });
+        }
+
+        //Missing properties should be obtained from oldValue if possible or initialized if they're missing in oldValue object
+        requiredValueProperties.forEach(function (propertyName) {
+            if (oldValue.hasOwnProperty(propertyName)) {
+                self.value[propertyName] = oldValue[propertyName];
+            } else {
+                if (propertyName == "invalid") {
+                    self.value[propertyName] = { count: 0 };
+                } else {
+                    self.value[propertyName] = [];
+                }
+            }
+        });
+    },
+
     ready: function() {
       this._isReady = false;
 
@@ -249,13 +288,16 @@
         this.$.fileInputInput.setAttribute("multiple", "");
       }
 
-      var newValue = {
-        invalid: {
-          count: 0
-        },
-        valid: []
-      };
-      this._setValue(newValue);
+      //var newValue = {
+      //  invalid: {
+      //    count: 0
+      //  },
+      //  valid: [],
+      //  current: [],
+      //  deleted: []
+      //};
+
+      //this.value = newValue;
 
       this._isReady = true;
     },
@@ -277,7 +319,8 @@
         invalid = {
           count: 0
         },
-        valid = [];
+        valid = [],
+      deleted = this.value.current.slice();
 
       var sizeValidationResult = this._getResultOfSizeValidation(this.minSize, this.maxSize, files);
       var extensionValidationResult = this._getResultOfExtensionsValidation(this.extensions, sizeValidationResult.valid);
@@ -302,16 +345,26 @@
 
       var files = countLimitValidationResult.valid;
       this._setFiles(files);
+
       valid = [];
       files.forEach(function (file) {
-        valid.push(file.name);
+          valid.push(file.name);
+          
+          deleted.forEach(function (item, index) {
+              if (item.name === file.name) {
+                  deleted.splice(index, 1);
+                  return;
+              }
+          });
       });
 
       var newValue = {
         invalid: invalid,
-        valid: valid
+        valid: valid,
+        deleted: deleted
       };
-      this._setValue(newValue);
+
+      this.value = newValue;
 
       if (this.value.valid.length > 0) {
         var selectedFile = this.value.valid.join(',');
