@@ -237,6 +237,8 @@
       }
     },
 
+    //observers: ['currentChanged(value.current)'],
+
     $meta: [{
       title: "File",
       type: "string",
@@ -257,9 +259,15 @@
             //First pop all the propertis already contained in the newValue
             Object.keys(newValue).forEach(function (propertyName) {
                 if (newValue.hasOwnProperty(propertyName)) {
-                    var index = requiredValueProperties.indexOf(propertyName);
-                    if (index > -1) {
-                        requiredValueProperties.splice(index, 1);
+                    //This line should simulate "read-only" for "valid" and "invalid" properties of value prop
+                    //In this way, we avoid removing of these two string from array
+                    //Below, when cycling through requriedValueProperties array, method will override new "valid" and "invalid" values
+                    //with the old ones, simulating "read-only" flag
+                    if ((propertyName !== "valid") && (propertyName !== "invalid")) {
+                        var index = requiredValueProperties.indexOf(propertyName);
+                        if (index > -1) {
+                            requiredValueProperties.splice(index, 1);
+                        }
                     }
                 }
             });
@@ -277,6 +285,14 @@
                 }
             }
         });
+
+        // when value changes due to user input or its changed programmatically
+        // when valueChanged is called because value is set as attribute
+        // that happens before ready function is called, so value-changed
+        // should not be fired initially
+        if (this._isReady) {
+            this._fireValueChangedEvent(this.value);
+        }
     },
 
     ready: function() {
@@ -287,18 +303,7 @@
       if (this.maxFiles > 1) {
         this.$.fileInputInput.setAttribute("multiple", "");
       }
-
-      //var newValue = {
-      //  invalid: {
-      //    count: 0
-      //  },
-      //  valid: [],
-      //  current: [],
-      //  deleted: []
-      //};
-
-      //this.value = newValue;
-
+      
       this._isReady = true;
     },
     focus: function() {
@@ -312,15 +317,16 @@
       clickEvent.initEvent('click', false, true);
       this.$.fileInputInput.dispatchEvent(clickEvent);
     },
-    set value(newValue) {},
-    set files(newValue) {},
+
+    set value(newValue) { },
+    set files(newValue) { },
+
     changeHandler: function() {
-      var files = Array.prototype.slice.call(this.$.fileInputInput.files),
-        invalid = {
-          count: 0
-        },
-        valid = [],
-      deleted = this.value.current.slice();
+        var files = Array.prototype.slice.call(this.$.fileInputInput.files),
+          invalid = {
+              count: 0
+          },
+          valid = [];
 
       var sizeValidationResult = this._getResultOfSizeValidation(this.minSize, this.maxSize, files);
       var extensionValidationResult = this._getResultOfExtensionsValidation(this.extensions, sizeValidationResult.valid);
@@ -349,22 +355,10 @@
       valid = [];
       files.forEach(function (file) {
           valid.push(file.name);
-          
-          deleted.forEach(function (item, index) {
-              if (item.name === file.name) {
-                  deleted.splice(index, 1);
-                  return;
-              }
-          });
       });
 
-      var newValue = {
-        invalid: invalid,
-        valid: valid,
-        deleted: deleted
-      };
-
-      this.value = newValue;
+      this.value.valid = valid;
+      this.value.invalid = invalid;
 
       if (this.value.valid.length > 0) {
         var selectedFile = this.value.valid.join(',');
@@ -374,7 +368,10 @@
       }
 
       this.validate();
-      this.fire('value-changed', { value: newValue });
+
+      if (this._isReady) {
+          this._fireValueChangedEvent(this.value);
+      }
     },
     hideLabelChanged: function(newValue, oldValue) {
       this.toggleClass("hidden", newValue, this.$.label);
