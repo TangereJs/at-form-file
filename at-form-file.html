@@ -29,13 +29,122 @@
         flex: none;
         margin-left: 2px;
       }
+
+        .input {
+            min-height: 1em;
+            -webkit-box-sizing: var(--at-form-box-sizing_-_-webkit-box-sizing);
+            -moz-box-sizing: var(--at-form-box-sizing_-_-moz-box-sizing);
+            box-sizing: var(--at-form-box-sizing_-_box-sizing);
+            -webkit-box-shadow: none;
+            box-shadow: none;
+            background: #ffffff;
+            cursor: text;
+            font-family: var(--at-form-input-common_-_font-family);
+            -webkit-font-smoothing: var(--at-form-input-common_-_-webkit-font-smoothing);
+            font-size: var(--at-form-input-common_-_font-size);
+            font-weight: var(--at-form-input-common_-_font-weight);
+            line-height: var(--at-form-input-common_-_line-height);
+            white-space: var(--at-form-input-common_-_white-space);
+            overflow: var(--at-form-input-common_-_overflow);
+            text-overflow: var(--at-form-input-common_-_text-overflow);
+            display: var(--at-form-input-common_-_display);
+            border: var(--at-form-input-common_-_border);
+            box-shadow: var(--at-form-input-common_-_box-shadow);
+            border-radius: var(--at-form-input-common_-_border-radius);
+            margin: var(--at-form-input-common_-_margin);
+            outline: var(--at-form-input-common_-_outline);
+            -webkit-appearance: var(--at-form-input-common_-_-webkit-appearance);
+            -webkit-tap-highlight-color: var(--at-form-input-common_-_-webkit-tap-highlight-color);
+            padding: var(--at-form-input-common_-_padding);
+            background: var(--at-form-input-common_-_background);
+            color: var(--at-form-input-common_-_color);
+            -webkit-transition: var(--at-form-input-common_-_-webkit-transition);
+            transition: var(--at-form-input-common_-_transition);
+            width: var(--at-form-input-common_-_width);
+            vertical-align: var(--at-form-input-common_-_vertical-align);
+            padding-left: 9px;
+            padding-right: 9px;
+        }
+
+            .input.at-form-file {
+                font-family: var(--at-form-input-common_-_font-family);
+                -webkit-font-smoothing: var(--at-form-input-common_-_-webkit-font-smoothing);
+            }
+
+                .input.at-form-file > *.at-form-file {
+                    vertical-align: baseline;
+                    display: -moz-inline-stack;
+                    display: inline-block;
+                    zoom: 1;
+                    display: inline;
+                }
+
+                .input.at-form-file > .input.at-form-file {
+                    display: inline-block !important;
+                    padding: 0 !important;
+                    min-height: 0 !important;
+                    max-height: none !important;
+                    max-width: 100% !important;
+                    margin: 0 !important;
+                    text-indent: 0 !important;
+                    line-height: inherit !important;
+                    -webkit-user-select: auto !important;
+                }
+
+        .item {
+            cursor: pointer;
+            margin: 0 3px 0 0;
+            padding: 1px 3px 1px 8px;
+            vertical-align: text-top;
+
+            color: var(--at-text-selected_-_color);
+            background: var(--at-text-selected_-_background);
+            border: 0;
+
+            position: relative;
+            padding-right: 18px !important;
+
+            -webkit-border-radius: var(--at-form-border-radius2222_-_-webkit-border-radius);
+            -moz-border-radius: var(--at-form-border-radius2222_-_-moz-border-radius);
+            border-radius: var(--at-form-border-radius2222_-_border-radius);
+        }
+
+        .remove.at-form-file {
+            z-index: 1;
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 16px;
+            text-align: center;
+            text-decoration: none;
+            vertical-align: middle;
+            display: inline-block;
+            font-weight: bold;
+            font-size: 12px;
+            color: inherit;
+            text-decoration: none;
+            border-left: 1px solid rgba(0, 0, 0, 0);
+            -webkit-border-radius: var(--at-form-border-radius0220_-_-webkit-border-radius);
+            -moz-border-radius: var(--at-form-border-radius0220_-_-moz-border-radius);
+            border-radius: var(--at-form-border-radius0220_-_border-radius);
+            -webkit-box-sizing: var(--at-form-box-sizing_-_-webkit-box-sizing);
+            -moz-box-sizing: var(--at-form-box-sizing_-_-moz-box-sizing);
+            box-sizing: var(--at-form-box-sizing_-_box-sizing);
+        }
+
+            .remove.at-form-file:hover {
+                background: rgba(0, 0, 0, 0.05);
+            }
     </style>
 
     <div id="atContainer" class="at-container">
       <iron-label id="label">{{label}}</iron-label>
       <div id="contentContainer" class="at-content-container input-group">
-        <input id="fileName" class="at-content has-placeholder" type="text" readonly tabindex="-1" disabled$="{{disabled}}" />
-        <var type="button" id="selectFileButton" class="input-group-addon" on-click="selectFileClickHandler" disabled$="{{disabled}}">
+        <!--<input id="fileName" class="at-content has-placeholder" type="text" readonly tabindex="-1" disabled$="{{disabled}}" style="display:none" />-->
+          <div id="fileContainer" class="input items"></div>
+        
+          <var type="button" id="selectFileButton" class="input-group-addon" on-click="selectFileClickHandler" disabled$="{{disabled}}">
           <at-carbon-icon id="buttonIcon" icon="{{icon}}"></at-carbon-icon>
           <span id="buttonIconText">Select a file</span>
         </var>
@@ -50,399 +159,463 @@
 <script>
   'use strict';
   Polymer({
-    is: 'at-form-file',
-    behaviors: [ Tangere.behaviors.formValidation, Tangere.behaviors.i18n ],
-    properties: {
-      /**
-       * Label for the element
-       * @property label
-       * @type String
-       */
-      label: {
-        type: String,
-        value: '',
-        title: 'Label'
-      },
-      /**
-       * Hides the label
-       * @property hideLabel
-       * @type String
-       */
-      hideLabel: {
-        type: Boolean,
-        value: false,
-        observer: 'hideLabelChanged',
-        title: 'Do not show the label'
-      },
-      /**
-       * Name of the icon
-       * @property icon
-       * @type String
-       * @default 'picture'
-       */
-      icon: {
-        type: String,
-        value: 'picture',
-        title: 'Button icon name'
-      },
-      /**
-       * If you want to restrict the types of files that the file chooser
-       * will allow your user's to select, you can make use of an `accept`
-       * property, passing one or more MIME types as comma-separated values.
-       * Please note that [browser support for this property is poor and implementations vary](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/Input#Browser_compatibility).
-       *
-       * @property accept
-       * @type string
-       * @default ''
-       */
-      accept: {
-        type: String,
-        value: '',
-        title: 'Allowed file extensions'
-      },
-      /**
-       * This is a validation property that allows you to filter out any
-       * files that do not contain a specific extension.  The value of this
-       * property is a JSON array string, containing all extensions to keep.
-       * You can also negate your extension array by including a `!` sign
-       * just before the array's opening bracket.
-       *
-       * @property extensions
-       * @type String
-       * @default ''
-       */
-      extensions: {
-        type: String,
-        value: ''
-      },
-      /**
-       * If you'd like to limit the number of files to accept from your
-       * users, specify this as an integer value for the `maxFiles` property.
-       *
-       * For example, to only accept 3 files:
-       *
-       *     <file-input maxFiles="3">
-       *         Select Files
-       *     </file-input>
-       *
-       * If you'd like to completely prevent users from selecting more
-       * than one file from the file chooser, you can simply set
-       * `maxFiles` to 1:
-       *
-       *     <file-input maxFiles="1">
-       *         Select Files
-       *     </file-input>
-       *
-       * @property maxFiles
-       * @type integer
-       * @default 1
-       */
-      maxFiles: {
-        type: Number,
-        value: 1,
-        observer: 'maxFilesChanged',
-        title: 'Maximum number of files'
-      },
-      /**
-       * Maximum acceptable file size for the purposes of validation.
-       * The value is expected to be in bytes.
-       *
-       * @property maxSize
-       * @type Number
-       * @default 0
-       */
-      maxSize: {
-        type: Number,
-        value: 0,
-        title: 'Maximum file size (in bytes)'
-      },
-      /**
-       * Minimum acceptable file size for the purposes of validation.
-       * The value is expected to be in bytes.
-       *
-       * @property minSize
-       * @type Number
-       * @default 0
-       */
-      minSize: {
-        type: Number,
-        value: 0,
-        title: 'Minimum file size (in bytes)'
-      },
-      /**
-       * Value of the element contains array of valid files and a count of invalid files
-       *
-       * @property value
-       * @type Object
-       * @default { invalid: {count: 0}, valid: [] }
-       */
-      value: {
-        type: Object,
-        value: function () {
-            return {
-                invalid: {
-                    count: 0
-                },
-                valid: [],
-                current: [],
-                deleted: []
-            };
-        },
-        observer: 'valueChanged',
-        title: 'Value'
-      },
-
-      files: {
-        type: Array,
-        value: function () {
-          return [];
-        },
-        readOnly: true
-      },
-      /**
-       * Required state of the element; true = required, false = optional
-       * @property required
-       * @type Boolean
-       * @default false
-       */
-      required: {
-        type: Boolean,
-        value: false,
-        observer: 'requiredChanged',
-        title: 'Input required'
-      },
-      /**
-       * Disabled state of the element; true = disabled, false = enabled
-       * @property disabled
-       * @type Boolean
-       * @default false
-       */
-      disabled: {
-        type: Boolean,
-        value: false,
-        observer: 'disabledChanged',
-        title: 'Field value can not be changed'
-      },
-      /**
-       * Hides the element. When hidden nothing is displayed for the element
-       * @property hide
-       * @type Boolean
-       * @default false
-       */
-      hide: {
-        type: Boolean,
-        value: false,
-        observer: 'hideChanged',
-        title: 'Field is invisible'
-      }
-    },
-
-    //observers: ['currentChanged(value.current)'],
-
-    $meta: [{
-      title: "File",
-      type: "string",
-      xtype: "file"
-    }],
-
-    valueChanged: function (newValue, oldValue) {
-        console.log("at-form-file value change detected");
-        //We'll use this requred properties list, so we can fill up any possible missing properties
-        var requiredValueProperties = ["invalid", "valid", "current", "deleted"];
-        var self = this;
-
-        if (!oldValue) {
-            oldValue = {};
-        }
-
-        if(newValue){
-            //First pop all the propertis already contained in the newValue
-            Object.keys(newValue).forEach(function (propertyName) {
-                if (newValue.hasOwnProperty(propertyName)) {
-                    //This line should simulate "read-only" for "valid" and "invalid" properties of value prop
-                    //In this way, we avoid removing of these two string from array
-                    //Below, when cycling through requriedValueProperties array, method will override new "valid" and "invalid" values
-                    //with the old ones, simulating "read-only" flag
-                    if ((propertyName !== "valid") && (propertyName !== "invalid")) {
-                        var index = requiredValueProperties.indexOf(propertyName);
-                        if (index > -1) {
-                            requiredValueProperties.splice(index, 1);
-                        }
-                    }
-                }
-            });
-        }
-
-        //Missing properties should be obtained from oldValue if possible or initialized if they're missing in oldValue object
-        requiredValueProperties.forEach(function (propertyName) {
-            if (oldValue.hasOwnProperty(propertyName)) {
-                self.value[propertyName] = oldValue[propertyName];
-            } else {
-                if (propertyName == "invalid") {
-                    self.value[propertyName] = { count: 0 };
-                } else {
-                    self.value[propertyName] = [];
-                }
-            }
-        });
-
-        // when value changes due to user input or its changed programmatically
-        // when valueChanged is called because value is set as attribute
-        // that happens before ready function is called, so value-changed
-        // should not be fired initially
-        if (this._isReady) {
-            this._fireValueChangedEvent(this.value);
-        }
-    },
-
-    ready: function() {
-      this._isReady = false;
-
-      this._validationFunctions.push(this._validateInternalConstraints.bind(this));
-
-      if (this.maxFiles > 1) {
-        this.$.fileInputInput.setAttribute("multiple", "");
-      }
-      
-      this._isReady = true;
-    },
-    focus: function() {
-      var selectAFileButton = this.$.selectFileButton;
-      if (selectAFileButton.focus) {
-        selectAFileButton.focus();
-      }
-    },
-    selectFileClickHandler: function() {
-      var clickEvent = document.createEvent('MouseEvent');
-      clickEvent.initEvent('click', false, true);
-      this.$.fileInputInput.dispatchEvent(clickEvent);
-    },
-
-    set value(newValue) { },
-    set files(newValue) { },
-
-    changeHandler: function() {
-        var files = Array.prototype.slice.call(this.$.fileInputInput.files),
-          invalid = {
-              count: 0
+      is: 'at-form-file',
+      behaviors: [ Tangere.behaviors.formValidation, Tangere.behaviors.i18n ],
+      properties: {
+          /**
+           * Label for the element
+           * @property label
+           * @type String
+           */
+          label: {
+              type: String,
+              value: '',
+              title: 'Label'
           },
+          /**
+           * Hides the label
+           * @property hideLabel
+           * @type String
+           */
+          hideLabel: {
+              type: Boolean,
+              value: false,
+              observer: 'hideLabelChanged',
+              title: 'Do not show the label'
+          },
+          /**
+           * Name of the icon
+           * @property icon
+           * @type String
+           * @default 'picture'
+           */
+          icon: {
+              type: String,
+              value: 'picture',
+              title: 'Button icon name'
+          },
+          /**
+           * If you want to restrict the types of files that the file chooser
+           * will allow your user's to select, you can make use of an `accept`
+           * property, passing one or more MIME types as comma-separated values.
+           * Please note that [browser support for this property is poor and implementations vary](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/Input#Browser_compatibility).
+           *
+           * @property accept
+           * @type string
+           * @default ''
+           */
+          accept: {
+              type: String,
+              value: '',
+              title: 'Allowed file extensions'
+          },
+          /**
+           * This is a validation property that allows you to filter out any
+           * files that do not contain a specific extension.  The value of this
+           * property is a JSON array string, containing all extensions to keep.
+           * You can also negate your extension array by including a `!` sign
+           * just before the array's opening bracket.
+           *
+           * @property extensions
+           * @type String
+           * @default ''
+           */
+          extensions: {
+              type: String,
+              value: ''
+          },
+          /**
+           * If you'd like to limit the number of files to accept from your
+           * users, specify this as an integer value for the `maxFiles` property.
+           *
+           * For example, to only accept 3 files:
+           *
+           *     <file-input maxFiles="3">
+           *         Select Files
+           *     </file-input>
+           *
+           * If you'd like to completely prevent users from selecting more
+           * than one file from the file chooser, you can simply set
+           * `maxFiles` to 1:
+           *
+           *     <file-input maxFiles="1">
+           *         Select Files
+           *     </file-input>
+           *
+           * @property maxFiles
+           * @type integer
+           * @default 1
+           */
+          maxFiles: {
+              type: Number,
+              value: 1,
+              observer: 'maxFilesChanged',
+              title: 'Maximum number of files'
+          },
+          /**
+           * Maximum acceptable file size for the purposes of validation.
+           * The value is expected to be in bytes.
+           *
+           * @property maxSize
+           * @type Number
+           * @default 0
+           */
+          maxSize: {
+              type: Number,
+              value: 0,
+              title: 'Maximum file size (in bytes)'
+          },
+          /**
+           * Minimum acceptable file size for the purposes of validation.
+           * The value is expected to be in bytes.
+           *
+           * @property minSize
+           * @type Number
+           * @default 0
+           */
+          minSize: {
+              type: Number,
+              value: 0,
+              title: 'Minimum file size (in bytes)'
+          },
+          /**
+           * Value of the element contains array of valid files and a count of invalid files
+           *
+           * @property value
+           * @type Object
+           * @default { invalid: {count: 0}, valid: [] }
+           */
+          value: {
+              type: Object,
+              value: function () {
+                  return {
+                      invalid: {
+                          count: 0
+                      },
+                      valid: [],
+                      current: [],
+                      deleted: []
+                  };
+              },
+              observer: 'valueChanged',
+              title: 'Value'
+          },
+
+          files: {
+              type: Array,
+              value: function () {
+                  return [];
+              },
+              readOnly: true
+          },
+          /**
+           * Required state of the element; true = required, false = optional
+           * @property required
+           * @type Boolean
+           * @default false
+           */
+          required: {
+              type: Boolean,
+              value: false,
+              observer: 'requiredChanged',
+              title: 'Input required'
+          },
+          /**
+           * Disabled state of the element; true = disabled, false = enabled
+           * @property disabled
+           * @type Boolean
+           * @default false
+           */
+          disabled: {
+              type: Boolean,
+              value: false,
+              observer: 'disabledChanged',
+              title: 'Field value can not be changed'
+          },
+          /**
+           * Hides the element. When hidden nothing is displayed for the element
+           * @property hide
+           * @type Boolean
+           * @default false
+           */
+          hide: {
+              type: Boolean,
+              value: false,
+              observer: 'hideChanged',
+              title: 'Field is invisible'
+          }
+      },
+
+      //observers: ['currentChanged(value.current)'],
+
+      $meta: [{
+          title: "File",
+          type: "string",
+          xtype: "file"
+      }],
+
+      valueChanged: function (newValue, oldValue) {
+          console.log("at-form-file value change detected");
+          //We'll use this requred properties list, so we can fill up any possible missing properties
+          var requiredValueProperties = ["invalid", "valid", "current", "deleted"];
+          var self = this;
+
+          if (!oldValue) {
+              oldValue = {};
+          }
+
+          if(newValue){
+              //First pop all the propertis already contained in the newValue
+              Object.keys(newValue).forEach(function (propertyName) {
+                  if (newValue.hasOwnProperty(propertyName)) {
+                      //This line should simulate "read-only" for "valid" and "invalid" properties of value prop
+                      //In this way, we avoid removing of these two string from array
+                      //Below, when cycling through requriedValueProperties array, method will override new "valid" and "invalid" values
+                      //with the old ones, simulating "read-only" flag
+                      if ((propertyName !== "valid") && (propertyName !== "invalid")) {
+                          var index = requiredValueProperties.indexOf(propertyName);
+                          if (index > -1) {
+                              requiredValueProperties.splice(index, 1);
+                          }
+                      }
+                  }
+              });
+          }
+
+          //Missing properties should be obtained from oldValue if possible or initialized if they're missing in oldValue object
+          requiredValueProperties.forEach(function (propertyName) {
+              if (oldValue.hasOwnProperty(propertyName)) {
+                  self.value[propertyName] = oldValue[propertyName];
+              } else {
+                  if (propertyName == "invalid") {
+                      self.value[propertyName] = { count: 0 };
+                  } else {
+                      self.value[propertyName] = [];
+                  }
+              }
+          });
+
+          for (var i = 0; i < this.value.current.length; i++) {
+              var item = this.value.current[i];
+              this.renderFileUI(item.name, item.url);
+          }
+        
+
+          // when value changes due to user input or its changed programmatically
+          // when valueChanged is called because value is set as attribute
+          // that happens before ready function is called, so value-changed
+          // should not be fired initially
+          if (this._isReady) {
+              this._fireValueChangedEvent(this.value);
+          }
+      },
+
+      ready: function() {
+          this._isReady = false;
+
+          this._validationFunctions.push(this._validateInternalConstraints.bind(this));
+
+          if (this.maxFiles > 1) {
+              this.$.fileInputInput.setAttribute("multiple", "");
+          }
+      
+          this._isReady = true;
+      },
+      focus: function() {
+          var selectAFileButton = this.$.selectFileButton;
+          if (selectAFileButton.focus) {
+              selectAFileButton.focus();
+          }
+      },
+      selectFileClickHandler: function() {
+          var clickEvent = document.createEvent('MouseEvent');
+          clickEvent.initEvent('click', false, true);
+          this.$.fileInputInput.dispatchEvent(clickEvent);
+      },
+
+      set value(newValue) { },
+      set files(newValue) { },
+
+      changeHandler: function() {
+          var files = Array.prototype.slice.call(this.$.fileInputInput.files),
+            invalid = {
+                count: 0
+            },
+            valid = [];
+
+          var sizeValidationResult = this._getResultOfSizeValidation(this.minSize, this.maxSize, files);
+          var extensionValidationResult = this._getResultOfExtensionsValidation(this.extensions, sizeValidationResult.valid);
+          var countLimitValidationResult = this._getResultOfCountLimitValidation(this.maxFiles, extensionValidationResult.valid);
+
+          if (sizeValidationResult.tooBig.length) {
+              invalid.tooBig = sizeValidationResult.tooBig;
+              invalid.count += sizeValidationResult.tooBig.length;
+          }
+          if (sizeValidationResult.tooSmall.length) {
+              invalid.tooSmall = sizeValidationResult.tooSmall;
+              invalid.count += sizeValidationResult.tooSmall.length;
+          }
+          if (extensionValidationResult.invalid.length) {
+              invalid.badExtension = extensionValidationResult.invalid;
+              invalid.count += extensionValidationResult.invalid.length;
+          }
+          if (countLimitValidationResult.invalid.length) {
+              invalid.tooMany = countLimitValidationResult.invalid;
+              invalid.count += countLimitValidationResult.invalid.length;
+          }
+
+          var files = countLimitValidationResult.valid;
+          this._setFiles(files);
+
           valid = [];
+          files.forEach(function (file) {
+              valid.push(file.name);
+          });
 
-      var sizeValidationResult = this._getResultOfSizeValidation(this.minSize, this.maxSize, files);
-      var extensionValidationResult = this._getResultOfExtensionsValidation(this.extensions, sizeValidationResult.valid);
-      var countLimitValidationResult = this._getResultOfCountLimitValidation(this.maxFiles, extensionValidationResult.valid);
+          this.value.valid = valid;
+          this.value.invalid = invalid;
 
-      if (sizeValidationResult.tooBig.length) {
-        invalid.tooBig = sizeValidationResult.tooBig;
-        invalid.count += sizeValidationResult.tooBig.length;
-      }
-      if (sizeValidationResult.tooSmall.length) {
-        invalid.tooSmall = sizeValidationResult.tooSmall;
-        invalid.count += sizeValidationResult.tooSmall.length;
-      }
-      if (extensionValidationResult.invalid.length) {
-        invalid.badExtension = extensionValidationResult.invalid;
-        invalid.count += extensionValidationResult.invalid.length;
-      }
-      if (countLimitValidationResult.invalid.length) {
-        invalid.tooMany = countLimitValidationResult.invalid;
-        invalid.count += countLimitValidationResult.invalid.length;
-      }
+          if (this.value.valid.length > 0) {
+              for (var i = 0; i < this.value.valid.length; i++){
+                  this.renderFileUI(this.value.valid[i], "");
+              }
+          }
 
-      var files = countLimitValidationResult.valid;
-      this._setFiles(files);
+          this.validate();
 
-      valid = [];
-      files.forEach(function (file) {
-          valid.push(file.name);
-      });
+          if (this._isReady) {
+              this._fireValueChangedEvent(this.value);
+          }
+      },
+      hideLabelChanged: function(newValue, oldValue) {
+          this.toggleClass("hidden", newValue, this.$.label);
+      },
+      hideChanged: function(newValue, oldValue) {
+          var wrapper = this.$.atContainer;
+          this.toggleClass('hidden', newValue, wrapper);
+          if (this._isReady) {
+              this.validate();
+          }
+      },
+      requiredChanged: function(newValue, oldValue) {
+          if (this._isReady) {
+              this.validate();
+          }
+      },
+      disabledChanged: function(newValue, oldValue) {
+          this.toggleClass('disabled', newValue, this.$.selectFileButton);
+          var atContainer = this.$.atContainer;
+          this.toggleClass('disabled', newValue, atContainer);
+          if (this._isReady) {
+              this.validate();
+          }
+      },
 
-      this.value.valid = valid;
-      this.value.invalid = invalid;
+      _updateUIValidState: function(isValid) {
+          var label = this.$.label;
+          this.toggleClass('error', !isValid, label);
+          var contentContainer = this.$.contentContainer;
+          this.toggleClass('error', !isValid, contentContainer);
+      },
 
-      if (this.value.valid.length > 0) {
-        var selectedFile = this.value.valid.join(',');
-        this.$.fileName.value = selectedFile;
-      } else {
-        this.$.fileName.value = '';
-      }
+      _checkRequired: function(value) {
+          // coerce this.required to boolean; if element doesn't have required property,
+          // undefined is coerced to false so final result will be valid = true
+          var required = Boolean(this.required);
+          var valid = !required || (value != undefined && value.valid && value.valid.length > 0);
+          // set the _errorMessage when constraint is not satisfied
+          if (!valid) {
+              this._errorMessage = this.T("This field is required.");
+          }
+          // return result;
+          return valid;
+      },
 
-      this.validate();
+      _validateInternalConstraints: function(value) {
+          var result = true;
 
-      if (this._isReady) {
-          this._fireValueChangedEvent(this.value);
-      }
-    },
-    hideLabelChanged: function(newValue, oldValue) {
-      this.toggleClass("hidden", newValue, this.$.label);
-    },
-    hideChanged: function(newValue, oldValue) {
-      var wrapper = this.$.atContainer;
-      this.toggleClass('hidden', newValue, wrapper);
-      if (this._isReady) {
-        this.validate();
-      }
-    },
-    requiredChanged: function(newValue, oldValue) {
-      if (this._isReady) {
-        this.validate();
-      }
-    },
-    disabledChanged: function(newValue, oldValue) {
-      this.toggleClass('disabled', newValue, this.$.selectFileButton);
-      var atContainer = this.$.atContainer;
-      this.toggleClass('disabled', newValue, atContainer);
-      if (this._isReady) {
-        this.validate();
-      }
-    },
+          result = result && value.invalid.count === 0;
 
-    _updateUIValidState: function(isValid) {
-      var label = this.$.label;
-      this.toggleClass('error', !isValid, label);
-      var contentContainer = this.$.contentContainer;
-      this.toggleClass('error', !isValid, contentContainer);
-    },
+          if (!result) {
+              this._errorMessage = 'Value is invalid';
+          }
 
-    _checkRequired: function(value) {
-      // coerce this.required to boolean; if element doesn't have required property,
-      // undefined is coerced to false so final result will be valid = true
-      var required = Boolean(this.required);
-      var valid = !required || (value != undefined && value.valid && value.valid.length > 0);
-      // set the _errorMessage when constraint is not satisfied
-      if (!valid) {
-        this._errorMessage = this.T("This field is required.");
-      }
-      // return result;
-      return valid;
-    },
+          return result;
+      },
 
-    _validateInternalConstraints: function(value) {
-      var result = true;
+      /**
+       * To reset the `files` and `invalidFiles` cache on your element,
+       * use the `reset()` function:
+       *
+       *     document.querySelector("file-input").reset();
+       *
+       * @method reset
+       */
+      reset: function() {
+          this.created();
+      },
+      created: function() {
+          // *ij* I do not understand the purpose of this function
+      },
 
-      result = result && value.invalid.count === 0;
+      //Method adds new item to a fileContainer element (Only UI, no "value.*" logic)
+      renderFileUI: function (fileName, fileUrl) {
 
-      if (!result) {
-        this._errorMessage = 'Value is invalid';
-      }
+          //Check if we already have rendered this file in the UI
+          var _existingFiles = Polymer.dom(this.$.fileContainer);
+          for (var i = 0; i < _existingFiles.children.length; i++) {
+              //If we have matching fileName and fileUrl then we skip rest of the logic (item is already rendered in the UI)
+              if (_existingFiles.children[i].getAttribute("file-name") == fileName && _existingFiles.children[i].getAttribute("file-url") == fileUrl) {
+                  return;
+              }
+          }
 
-      return result;
-    },
+          var removeBtn = document.createElement('a');
+          removeBtn.setAttribute('href', "javascript:void(0)");
+          removeBtn.setAttribute('title', "Remove");
+          removeBtn.setAttribute('tabindex', "-1");
+          removeBtn.innerHTML = "&times;";
+          removeBtn.className = "remove";
 
-    /**
-     * To reset the `files` and `invalidFiles` cache on your element,
-     * use the `reset()` function:
-     *
-     *     document.querySelector("file-input").reset();
-     *
-     * @method reset
-     */
-    reset: function() {
-      this.created();
-    },
-    created: function() {
-      // *ij* I do not understand the purpose of this function
-    },
+          //var fileNameWrapper = document.createElement('span');
+          //fileNameWrapper.innerText = fileName;
+
+          var fileTag = document.createElement('div');
+          fileTag.className = "item";
+          fileTag.setAttribute('file-name', fileName);
+          fileTag.setAttribute('file-url', fileUrl);
+          fileTag.innerHTML = fileName;
+          fileTag.appendChild(removeBtn);
+
+          Polymer.dom(this.$.fileContainer).appendChild(fileTag);
+
+          var self = this;
+          //Download file
+          fileTag.addEventListener("click", function (e) {
+
+              e.preventDefault();
+              e.stopPropagation();
+          });
+
+          //Move to deleted files, remove from UI
+          removeBtn.addEventListener("click", function (e) {
+              var fileName = this.parentNode.getAttribute("file-name");
+              var fileUrl = this.parentNode.getAttribute("file-url");
+              
+              //If file exists in value.current list => exists on server => should be marked for delete on form submit
+              var current = self.value.current;
+              for (var i = 0; i < current.length; i++) {
+                  if (current[i].name == fileName && current[i].url == fileUrl) {
+                      self.value.deleted.push(JSON.parse(JSON.stringify(current[i])));
+                  }
+              }
+
+              this.parentNode.remove();
+
+              e.preventDefault();
+              e.stopPropagation();
+          });
+      },
 
     maxFilesChanged: function(newValue, oldValue) {
       try {
@@ -546,8 +719,10 @@
     // but if gived focusable element it can attach to its focus event
     // it should return focusable element if available or null if focusable element doesn't exist
     _getFocusableElement: function () {
-      var focusable = this.$.fileName;
-      return focusable;
+        //var focusable = this.$.fileName;
+        var focusable = this.$.fileContainer;
+
+        return focusable;
     }
   });
 </script>
