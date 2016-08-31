@@ -91,9 +91,16 @@
                     -webkit-user-select: auto !important;
                 }
 
+            .input > div {
+                cursor: pointer;
+                @apply(--at-text-selected);
+                border: 0;
+                float: left;
+            }
+
         .item {
             cursor: pointer;
-            margin: 0 3px 0 0;
+            margin: 0 3px 3px 0;
             padding: 1px 3px 1px 8px;
             vertical-align: text-top;
 
