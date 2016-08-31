@@ -109,21 +109,24 @@
             border-radius: var(--at-form-border-radius2222_-_border-radius);
         }
 
-        .remove.at-form-file {
+        #fileContainer a{
             z-index: 1;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 12px;
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .remove.at-form-file {
             position: absolute;
             top: 0;
             right: 0;
             bottom: 0;
             width: 16px;
-            text-align: center;
-            text-decoration: none;
             vertical-align: middle;
-            display: inline-block;
             font-weight: bold;
-            font-size: 12px;
-            color: inherit;
-            text-decoration: none;
             border-left: 1px solid rgba(0, 0, 0, 0);
             -webkit-border-radius: var(--at-form-border-radius0220_-_-webkit-border-radius);
             -moz-border-radius: var(--at-form-border-radius0220_-_-moz-border-radius);
@@ -421,6 +424,7 @@
       
           this._isReady = true;
       },
+
       focus: function() {
           var selectAFileButton = this.$.selectFileButton;
           if (selectAFileButton.focus) {
@@ -436,16 +440,44 @@
       set value(newValue) { },
       set files(newValue) { },
 
-      changeHandler: function() {
-          var files = Array.prototype.slice.call(this.$.fileInputInput.files),
+      changeHandler: function () {
+
+          //We'll use this code snippet here to create a list of file names that are in value.valid and value.current but are not deleted
+          //this list we'll use to disband all possible new files that has same names as ones already added
+          //but also to calculate how many files are able to be added based on maxFiles - distinctNames.length
+          var distinctNames = [];
+
+          for (var i = 0; i < this.value.current.length; i++) {
+              distinctNames.push(this.value.current[i].name);
+          }
+
+          for (var i = 0; i < this.value.deleted.length; i++) {
+              var fileNameIndex = distinctNames.indexOf(this.value.deleted[i].name);
+              if (fileNameIndex > -1) {
+                  distinctNames.splice(fileNameIndex, 1);
+              }
+          }
+
+          for (var i = 0; i < this.files.length; i++) {
+              distinctNames.push(this.files[i].name);
+          }
+
+          //var files = Array.prototype.slice.call(e.target.files);
+          var newFiles = Array.prototype.slice.call(this.$.fileInputInput.files),
             invalid = {
                 count: 0
             },
             valid = [];
 
-          var sizeValidationResult = this._getResultOfSizeValidation(this.minSize, this.maxSize, files);
+          this.$.fileInputInput.value = "";
+
+          var sizeValidationResult = this._getResultOfSizeValidation(this.minSize, this.maxSize, newFiles);
           var extensionValidationResult = this._getResultOfExtensionsValidation(this.extensions, sizeValidationResult.valid);
-          var countLimitValidationResult = this._getResultOfCountLimitValidation(this.maxFiles, extensionValidationResult.valid);
+
+          var numberOfFilesLeft = this.maxFiles - distinctNames.length;
+          if (numberOfFilesLeft <= 0) numberOfFilesLeft = 0;
+
+          var countLimitValidationResult = this._getResultOfCountLimitValidation(numberOfFilesLeft, extensionValidationResult.valid);
 
           if (sizeValidationResult.tooBig.length) {
               invalid.tooBig = sizeValidationResult.tooBig;
@@ -464,7 +496,18 @@
               invalid.count += countLimitValidationResult.invalid.length;
           }
 
-          var files = countLimitValidationResult.valid;
+          //Get only new files that aren't already selected for upload or on server
+          var files = [];
+          for (var i = 0; i < countLimitValidationResult.valid.length; i++)
+          {
+              if (distinctNames.indexOf(countLimitValidationResult.valid[i].name) < 0)
+              {
+                  files.push(countLimitValidationResult.valid[i]);
+                  distinctNames.push(countLimitValidationResult.valid[i].name)
+              }
+          }
+          files = this.files.concat(files);
+
           this._setFiles(files);
 
           valid = [];
@@ -564,11 +607,18 @@
           //Check if we already have rendered this file in the UI
           var _existingFiles = Polymer.dom(this.$.fileContainer);
           for (var i = 0; i < _existingFiles.children.length; i++) {
-              //If we have matching fileName and fileUrl then we skip rest of the logic (item is already rendered in the UI)
-              if (_existingFiles.children[i].getAttribute("file-name") == fileName && _existingFiles.children[i].getAttribute("file-url") == fileUrl) {
+              //If we have matching fileName then we skip rest of the logic (item is already rendered in the UI)
+              if (_existingFiles.children[i].getAttribute("file-name") == fileName) {
                   return;
               }
           }
+
+          var downloadBtn = document.createElement('a');
+          downloadBtn.setAttribute('href', fileUrl);
+          downloadBtn.setAttribute('target', "_blank");
+          downloadBtn.setAttribute('title', "Download");
+          downloadBtn.setAttribute('tabindex', "-1");
+          downloadBtn.innerHTML = fileName;
 
           var removeBtn = document.createElement('a');
           removeBtn.setAttribute('href', "javascript:void(0)");
@@ -584,7 +634,7 @@
           fileTag.className = "item";
           fileTag.setAttribute('file-name', fileName);
           fileTag.setAttribute('file-url', fileUrl);
-          fileTag.innerHTML = fileName;
+          fileTag.appendChild(downloadBtn);
           fileTag.appendChild(removeBtn);
 
           Polymer.dom(this.$.fileContainer).appendChild(fileTag);
@@ -592,9 +642,9 @@
           var self = this;
           //Download file
           fileTag.addEventListener("click", function (e) {
-
-              e.preventDefault();
-              e.stopPropagation();
+              //location.href = fileUrl;
+              //e.preventDefault();
+              //e.stopPropagation();
           });
 
           //Move to deleted files, remove from UI
@@ -602,11 +652,21 @@
               var fileName = this.parentNode.getAttribute("file-name");
               var fileUrl = this.parentNode.getAttribute("file-url");
               
-              //If file exists in value.current list => exists on server => should be marked for delete on form submit
-              var current = self.value.current;
-              for (var i = 0; i < current.length; i++) {
-                  if (current[i].name == fileName && current[i].url == fileUrl) {
-                      self.value.deleted.push(JSON.parse(JSON.stringify(current[i])));
+              //Only files that are on server have fileUrl value, new files have no fileUrl
+              if (fileUrl) {
+                  //If file exists in value.current list => exists on server => should be marked for delete on form submit
+                  var current = self.value.current;
+                  for (var i = 0; i < current.length; i++) {
+                      if (current[i].name == fileName && current[i].url == fileUrl) {
+                          self.value.deleted.push(JSON.parse(JSON.stringify(current[i])));
+                      }
+                  }
+              } else {
+                  //If file exist in files list, it should be removed, to prevent upload of that file
+                  for (var i = 0; i < self.files.length; i++) {
+                      if (self.files[i].name == fileName) {
+                          self.files.splice(i, 1);
+                      }
                   }
               }
 
@@ -614,6 +674,8 @@
 
               e.preventDefault();
               e.stopPropagation();
+
+              self._fireValueChangedEvent(this.value);
           });
       },
 
