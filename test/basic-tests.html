@@ -86,7 +86,9 @@
           invalid: {
             count: 0
           },
-          valid: []
+          valid: [],
+          deleted: [],
+          current: []
         };
         assert.deepEqual(input.value, expectedValue, 'initial at-form-file.value is incorrect');
       });
@@ -103,8 +105,6 @@
       test('disabled sets css classes', function() {
         var input = fixture('disabled');
         assert.equal(input.disabled, true, 'disabled property is true');
-        var inputElement = input._getFocusableElement();
-        assert.equal(inputElement.hasAttribute('disabled'), true, 'input element disabled attribute not set');
         assert.equal(input.$.selectFileButton.hasAttribute('disabled'), true, 'input icon does not have disabled class');
         assert.equal(input.$.atContainer.classList.contains('disabled'), true, 'container does not have disabled class');
       });
@@ -132,7 +132,7 @@
       test('errorMessage => valid = false', function() {
         var input = fixture('errorMessageValidFalse');
         assert.equal(input.errorMessage, 'demo error message', 'error message is correctly set');
-        assert.equal(input.valid, true, 'input is valid because error message is set as attribute');
+        assert.equal(input.valid, false, 'input is valid because error message is set as attribute');
         input.errorMessage = 'Another version of demo error message';
         assert.equal(input.errorMessage, 'Another version of demo error message', 'error message is correctly set');
         assert.equal(input.valid, false, 'input is invalid because error message is set as property');
