@@ -161,11 +161,12 @@
         };
         var required_ = Boolean(required);
 
-        // if required is true return true if value is not undefined, null or ""
-        validationResult.isValid = !required_ || ([undefined, null].indexOf(value) === -1);
-        if (validationResult.isValid && value !== null) {
-          validationResult.isValid = isObject(value) && isArray(value.valid) && value.valid.length > 0;
+        if (isObject(value)) {
+          validationResult.isValid = !required_ || (isArray(value.valid) && value.valid.length > 0 || (isArray(value.current) && value.current.length > 0));
+        } else {
+          validationResult.isValid = !required_ || (value !== null);
         }
+
         if (!validationResult.isValid) {
           validationResult.errorMessage = localizer("This field is required.");
         }

@@ -182,7 +182,7 @@
         assert.equal(validationResult.isValid, false, 'schema.value is valid');
         assert.equal(validationResult.errorMessage, format("Type specified in schema doesn't match type of value object for property value. Expected {0} to match {1}", stringTypeObject, undefinedTypeString), 'error message not set correctly');
 
-        var invalidValues = [ undefined, 42, 3.14159, true, false, [], {}, function () { return undefined; }];
+        var invalidValues = [ undefined, 42, 3.14159, true, false, [], function () { return undefined; }];
 
         function getTypeString(obj) {
           return  Object.prototype.toString.call(obj);
@@ -247,13 +247,104 @@
 
         schema.required = true;
         value = {
-          invalid: []
+          valid: []
+        };
+
+        var validationResult = inputValidation._validateData(schema, value, format);
+        assert.equal(validationResult.isValid, false, 'schema.value is invalid');
+        assert.equal(validationResult.errorMessage, 'This field is required.');
+
+        schema.required = false;
+        var validationResult = inputValidation._validateData(schema, value, format);
+        assert.equal(validationResult.isValid, true, 'schema.value is invalid');
+        assert.equal(validationResult.errorMessage, '');
+
+        schema.required = true;
+        value = {
+          valid: [ 'lorem1.txt', 'lorem2.txt', 'lorem3.txt' ],
+          invalid: { ipsum1: 'ipsum1.txt', ipsum2: 'ipsum2.txt' }
+        };
+
+        var validationResult = inputValidation._validateData(schema, value, format);
+        assert.equal(validationResult.isValid, false, 'schema.value is valid');
+        assert.equal(validationResult.errorMessage, 'Value is invalid.');
+
+        schema.required = false;
+        value = {
+          valid: [ 'lorem1.txt', 'lorem2.txt', 'lorem3.txt' ],
+          invalid: {
+            count: 0
+          }
         };
 
         var validationResult = inputValidation._validateData(schema, value, format);
         assert.equal(validationResult.isValid, true, 'schema.value is invalid');
         assert.equal(validationResult.errorMessage, '');
       });
+
+      test('valid schema, value !== null, required = [true, false] test', function() {
+        var inputValidation = Tangere.behaviors.AtFormFileInputValidation;
+        var schema = {
+          properties: {
+            value: {
+              type: Object
+            }
+          },
+          required: false
+        };
+
+        var value = {
+          valid: [],
+          invalid: {
+            count: 0
+          },
+          current: [],
+          deleted: []
+        };
+
+        var validationResult = inputValidation._validateData(schema, value, format);
+        assert.equal(validationResult.isValid, true, 'schema.value is invalid');
+        assert.equal(validationResult.errorMessage, '');
+
+        schema.required = true;
+
+        var validationResult = inputValidation._validateData(schema, value, format);
+        assert.equal(validationResult.isValid, false, 'schema.value is invalid');
+        assert.equal(validationResult.errorMessage, 'This field is required.');
+
+        value.valid = [ 'lorem1.txt', 'lorem2.txt', 'lorem3.txt' ];
+
+        var validationResult = inputValidation._validateData(schema, value, format);
+        assert.equal(validationResult.isValid, true, 'schema.value is invalid');
+        assert.equal(validationResult.errorMessage, '');
+
+        value.valid = [];
+        value.current = [ 'lorem1.txt', 'lorem2.txt', 'lorem3.txt' ];
+
+        var validationResult = inputValidation._validateData(schema, value, format);
+        assert.equal(validationResult.isValid, true, 'schema.value is invalid');
+        assert.equal(validationResult.errorMessage, '');
+
+        schema.required = false;
+        value.current = [];
+
+        var validationResult = inputValidation._validateData(schema, value, format);
+        assert.equal(validationResult.isValid, true, 'schema.value is invalid');
+        assert.equal(validationResult.errorMessage, '');
+
+        value.invalid.count = 5;
+
+        var validationResult = inputValidation._validateData(schema, value, format);
+        assert.equal(validationResult.isValid, false, 'schema.value is valid');
+        assert.equal(validationResult.errorMessage, 'Value is invalid.');
+
+        value.invalid.count = 0;
+
+        var validationResult = inputValidation._validateData(schema, value, format);
+        assert.equal(validationResult.isValid, true, 'schema.value is valid');
+        assert.equal(validationResult.errorMessage, '');
+      });
+
 
     });
   </script>
