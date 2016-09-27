@@ -364,7 +364,7 @@
     },
 
     observers: [
-      '_internalValidStateUpdate(disabled, required)'
+      '_internalValidStateUpdate(required)'
     ],
 
     $meta: [{
@@ -384,7 +384,7 @@
       }
 
       this._isReady = true;
-      this._internalValidStateUpdate(this.disabled, this.required);
+      this._internalValidStateUpdate(this.required);
     },
 
     _disabledChanged: function(newValue, oldValue) {
@@ -398,7 +398,7 @@
       this.toggleClass('hidden', newValue, atContainer);
     },
 
-    _internalValidStateUpdate: function(disabled, required) {
+    _internalValidStateUpdate: function(required) {
       if (this._isReady) {
         this.validate();
       }
@@ -409,7 +409,7 @@
 
       var validationResult = this._validateBaseData();
       if(showError) this._handleValidationResult(validationResult);
-      if (validationResult.isFinal) {
+      if (!validationResult.isValid) {
         return validationResult.isValid;
       }
 
@@ -427,6 +427,13 @@
     },
 
     _valueChanged: function(newValue, oldValue) {
+      if (newValue === null) {
+        if (this._isReady) {
+          this._fireValueChangedEvent(this.value);
+        }
+        return;
+      }
+
       console.log("at-form-file value change detected");
       //We'll use this requred properties list, so we can fill up any possible missing properties
       var requiredValueProperties = ["invalid", "valid", "current", "deleted"];
