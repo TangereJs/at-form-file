@@ -153,9 +153,9 @@
       <iron-label id="label">{{label}}</iron-label>
       <div id="contentContainer" class="at-content-container input-group">
         <!--<input id="fileName" class="at-content has-placeholder" type="text" readonly tabindex="-1" disabled$="{{disabled}}" style="display:none" />-->
-          <div id="fileContainer" class="input items"></div>
+        <div id="fileContainer" class="input items"></div>
 
-          <var type="button" id="selectFileButton" class="input-group-addon" on-click="_selectFileClickHandler" disabled$="{{disabled}}">
+        <var type="button" id="selectFileButton" class="input-group-addon" on-click="_selectFileClickHandler" disabled$="{{disabled}}">
           <at-carbon-icon id="buttonIcon" icon="{{icon}}"></at-carbon-icon>
           <span id="buttonIconText">Select a file</span>
         </var>
@@ -496,6 +496,7 @@
     set files(newValue) {},
 
     _selectFileClickHandler: function() {
+      if (this.disabled) { return; }
       var clickEvent = document.createEvent('MouseEvent');
       clickEvent.initEvent('click', false, true);
       this.$.fileInputInput.dispatchEvent(clickEvent);
