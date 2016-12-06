@@ -14,21 +14,13 @@
   <template>
     <style include="at-form-common"></style>
     <style>
-      :host * {
-        box-sizing: border-box;
-      }
-
       :host {
         @apply(--at-form-host);
+        @apply(--at-form-box-sizing);
       }
 
-      #buttonIcon {
-        flex: none;
-      }
-
-      #buttonIconText {
-        flex: none;
-        margin-left: 2px;
+      :host * {
+        @apply(--at-form-box-sizing);
       }
 
         .input {
@@ -147,18 +139,47 @@
             .remove.at-form-file:hover {
                 background: rgba(0, 0, 0, 0.05);
             }
+
+      /*
+        First in at-theme/form.html there are input-group and input-group-addon classes which we can't use because they do not work recursively
+
+        at-content-container has a div for values .input.items and a div which contains button and a label .input-group-addon-1
+        .at-content-container.input-group-1 to display: flex and direction row sets the scene for layout
+        .input.items flex: 1 makes that div take as much space as possible
+        and input-group-addon-1 display block allows the addon to have enough space
+        The same logic is applied to .input-group-addon-1.icon-with-label, .icon and span that contains the label text
+      */
+      .at-content-container.input-group-1 {
+        display: flex;
+        flex-direction: row;
+      }
+
+      .at-content-container.input-group-1 .input.items {
+        flex: 1;
+      }
+
+      .at-content-container.input-group-1 .input-group-addon-1 {
+        display: block;
+      }
+
+      .at-content-container.input-group-1 .input-group-addon-1.icon-with-label {
+        display: flex;
+        @apply(--at-form-input-padding);
+      }
+
+      .at-content-container.input-group-1 .input-group-addon-1.icon-with-label .icon {
+        display: block;
+      }
     </style>
 
     <div id="atContainer" class="at-container">
       <iron-label id="label">{{label}}</iron-label>
-      <div id="contentContainer" class="at-content-container input-group">
-        <!--<input id="fileName" class="at-content has-placeholder" type="text" readonly tabindex="-1" disabled$="{{disabled}}" style="display:none" />-->
+      <div id="contentContainer" class="at-content-container input-group-1">
         <div id="fileContainer" class="input items"></div>
-
-        <var type="button" id="selectFileButton" class="input-group-addon" on-click="_selectFileClickHandler" disabled$="{{disabled}}">
-          <at-carbon-icon id="buttonIcon" icon="{{icon}}"></at-carbon-icon>
+        <div type="button" id="selectFileButton" class="input-group-addon-1 icon-with-label" on-click="_selectFileClickHandler" disabled$="{{disabled}}">
+          <at-carbon-icon id="buttonIcon" icon="{{icon}}" class="icon"></at-carbon-icon>
           <span id="buttonIconText">Select a file</span>
-        </var>
+        </div>
       </div>
       <div id="hint"></div>
       <div class="hidden">
