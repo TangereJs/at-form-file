@@ -448,6 +448,34 @@
     },
 
     _valueChanged: function(newValue, oldValue) {
+      function isString(obj) {
+        return Object.prototype.toString.call(obj) === "[object String]";
+      }
+
+      function isObject(obj) {
+        return Object.prototype.toString.call(obj) === "[object Object]";
+      }
+
+      if (isString(newValue)) {
+        try {
+          var parsedObj = JSON.parse(newValue);
+          this.value = parsedObj;
+        } catch (e) { console.log(e); }
+        return;
+      }
+
+      if (newValue !== null && !isObject(newValue)) { return; }
+
+      if (isString(oldValue)) {
+        try {
+          parsedObj = JSON.parse(oldValue);
+          oldValue = parsedObj;
+        } catch(e) {
+          oldValue = {};
+          console.log(e);
+        }
+      }
+
       if (newValue === null) {
         if (this.autoValidate) { this.validate(); }
         if (this._isReady) {
@@ -587,18 +615,24 @@
           distinctNames.push(countLimitValidationResult.valid[i].name)
         }
       }
-      files = this.files.concat(files);
+      if (this.maxFiles > 1 && this.files.length < this.maxFiles) {
+        files = this.files.concat(files);
+      } else {
+        files = this.files;
+      }
 
       this._setFiles(files);
 
       valid = [];
-      files.forEach(function(file) {
-        valid.push(file.name);
-      });
+      for (var flIndex = 0; flIndex < files.length && flIndex < this.maxFiles; flIndex++) {
+        var flFile = files[flIndex];
+        valid.push(flFile.name);
+      }
 
       this.value.valid = valid;
       this.value.invalid = invalid;
 
+      Polymer.dom(this.$.fileContainer).innerHTML = "";
       if (this.value.valid.length > 0) {
         for (var i = 0; i < this.value.valid.length; i++) {
           this._renderFileUI(this.value.valid[i], "");
@@ -675,8 +709,14 @@
         } else {
           //If file exist in files list, it should be removed, to prevent upload of that file
           for (var i = 0; i < self.files.length; i++) {
-            if (self.files[i].name == fileName) {
+            if (self.files[i].name === fileName) {
               self.files.splice(i, 1);
+            }
+          }
+          // We need to update self.value.valid as well to remove file that is removed from UI from value as well
+          for (i = 0; i < self.value.valid.length; i++) {
+            if (self.value.valid[i] === fileName) {
+              self.value.valid.splice(i, 1);
             }
           }
         }
