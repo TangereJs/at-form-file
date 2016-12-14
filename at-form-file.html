@@ -165,10 +165,15 @@
       .at-content-container.input-group-1 .input-group-addon-1.icon-with-label {
         display: flex;
         @apply(--at-form-input-padding);
+        cursor: pointer;
       }
 
       .at-content-container.input-group-1 .input-group-addon-1.icon-with-label .icon {
         display: block;
+      }
+
+      .at-content-container.input-group-1 .input-group-addon-1.icon-with-label span {
+        padding-left: 6px;
       }
     </style>
 
@@ -400,6 +405,10 @@
     },
 
     ready: function() {
+      // we do this because in playground this.maxFiles is string instead of number
+      var maxFiles = parseInt(this.maxFiles);
+      maxFiles = isNaN(maxFiles) ? 1 : maxFiles;
+
       if (this.maxFiles > 1) {
         this.$.fileInputInput.setAttribute("multiple", "");
       }
@@ -582,10 +591,22 @@
 
       this.$.fileInputInput.value = "";
 
-      var sizeValidationResult = this._getResultOfSizeValidation(this.minSize, this.maxSize, newFiles);
+      // we do this because in playground minSize becomes string instead of remaining number
+      var minSizeNumber = parseInt(this.minSize);
+      minSizeNumber = isNaN(minSizeNumber) ? 0 : minSizeNumber;
+
+      // we do this because in playground maxSize becomes string instead of remaining number
+      var maxSizeNumber = parseInt(this.maxSize);
+      maxSizeNumber = isNaN(maxSizeNumber) ? 0 : maxSizeNumber;
+
+      var sizeValidationResult = this._getResultOfSizeValidation(minSize, maxSize, newFiles);
       var extensionValidationResult = this._getResultOfExtensionsValidation(this.extensions, sizeValidationResult.valid);
 
-      var numberOfFilesLeft = this.maxFiles - distinctNames.length;
+      // we do this because in playground this.maxFiles is string instead of number
+      var maxFiles = parseInt(this.maxFiles);
+      maxFiles = isNaN(maxFiles) ? 1 : maxFiles;
+
+      var numberOfFilesLeft = maxFiles - distinctNames.length;
       if (numberOfFilesLeft <= 0) numberOfFilesLeft = 0;
 
       var countLimitValidationResult = this._getResultOfCountLimitValidation(numberOfFilesLeft, extensionValidationResult.valid);
@@ -615,16 +636,15 @@
           distinctNames.push(countLimitValidationResult.valid[i].name)
         }
       }
-      if (this.maxFiles > 1 && this.files.length < this.maxFiles) {
+
+      if (maxFiles > 1 && this.files.length < maxFiles) {
         files = this.files.concat(files);
-      } else {
-        files = this.files;
       }
 
       this._setFiles(files);
 
       valid = [];
-      for (var flIndex = 0; flIndex < files.length && flIndex < this.maxFiles; flIndex++) {
+      for (var flIndex = 0; flIndex < files.length && flIndex < maxFiles; flIndex++) {
         var flFile = files[flIndex];
         valid.push(flFile.name);
       }
