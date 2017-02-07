@@ -175,6 +175,10 @@
       .at-content-container.input-group-1 .input-group-addon-1.icon-with-label span {
         padding-left: 6px;
       }
+
+      #selectFileButton.disabled {
+        pointer-events: none;
+      }
     </style>
 
     <div id="atContainer" class="at-container">
@@ -540,6 +544,11 @@
         this._renderFileUI(item.name, item.url);
       }
 
+      // we do this because in playground this.maxFiles is string instead of number
+      var maxFiles = parseInt(this.maxFiles);
+      maxFiles = isNaN(maxFiles) ? 1 : maxFiles;
+      this.toggleClass('disabled', this.value.valid.length === maxFiles, this.$.selectFileButton);
+
       if (this.autoValidate) { this.validate(); }
 
       // when value changes due to user input or its changed programmatically
@@ -599,7 +608,7 @@
       var maxSizeNumber = parseInt(this.maxSize);
       maxSizeNumber = isNaN(maxSizeNumber) ? 0 : maxSizeNumber;
 
-      var sizeValidationResult = this._getResultOfSizeValidation(minSize, maxSize, newFiles);
+      var sizeValidationResult = this._getResultOfSizeValidation(minSizeNumber, maxSizeNumber, newFiles);
       var extensionValidationResult = this._getResultOfExtensionsValidation(this.extensions, sizeValidationResult.valid);
 
       // we do this because in playground this.maxFiles is string instead of number
@@ -657,6 +666,8 @@
         for (var i = 0; i < this.value.valid.length; i++) {
           this._renderFileUI(this.value.valid[i], "");
         }
+
+        this.toggleClass('disabled', this.value.valid.length === maxFiles, this.$.selectFileButton);
       }
 
       this.validate();
