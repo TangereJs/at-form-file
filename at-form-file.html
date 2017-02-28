@@ -547,7 +547,7 @@
       // we do this because in playground this.maxFiles is string instead of number
       var maxFiles = parseInt(this.maxFiles);
       maxFiles = isNaN(maxFiles) ? 1 : maxFiles;
-      this.toggleClass('disabled', this.value.valid.length === maxFiles, this.$.selectFileButton);
+      this.toggleClass('disabled', maxFiles > 1 && this.value.valid.length === maxFiles, this.$.selectFileButton);
 
       if (this.autoValidate) { this.validate(); }
 
@@ -667,7 +667,7 @@
           this._renderFileUI(this.value.valid[i], "");
         }
 
-        this.toggleClass('disabled', this.value.valid.length === maxFiles, this.$.selectFileButton);
+        this.toggleClass('disabled', maxFiles > 1 && this.value.valid.length === maxFiles, this.$.selectFileButton);
       }
 
       this.validate();
