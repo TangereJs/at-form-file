@@ -725,6 +725,8 @@
 
       //Move to deleted files, remove from UI
       removeBtn.addEventListener("click", function(e) {
+        if (self.disabled) { return; }
+
         var fileName = this.parentNode.getAttribute("file-name");
         var fileUrl = this.parentNode.getAttribute("file-url");
 
