@@ -9,7 +9,7 @@
     "at-carbon-icon": "TangereJs/at-carbon-icon#master",
     "at-form-behaviors": "TangereJs/at-form-behaviors#master",
     "iron-label": "PolymerElements/iron-label#master",
-    "layout": "polymer/layout#master",
+    "layout": "TangereJs/layout#master",
     "at-doc-viewer": "TangereJs/at-doc-viewer#master"
   }
 }
