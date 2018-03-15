@@ -5,11 +5,10 @@
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
   <title>at-form-file layout demo</title>
 
-  <script src="../webcomponentsjs/webcomponents-lite.js"></script>
-  <link rel="import" href="../at-theme/at-theme.html">
-  <link rel="import" href="../layout/layout.html">
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../../at-core-style-classes/at-core-style-classes.html" />
 
-  <style>
+  <style is="custom-style" include="at-core-style-classes">
     div {
       border: 1px dashed blue;
     }
@@ -27,11 +26,11 @@
 <body>
 
   <div class="w50">
-    <div class="layout horizontal">
-      <div class="flex">
+    <div class="layout-horizontal">
+      <div class="layout-flex">
         <input class="input" />
       </div>
-      <div class="horizontal layout center">
+      <div class="layout-horizontal layout-center">
         This text should be vertically aligned
       </div>
     </div>

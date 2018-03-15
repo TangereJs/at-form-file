@@ -1,128 +1,127 @@
-<link rel="import" href="../tangere/tangere.html">
-<link rel="import" href="../at-theme/at-theme.html">
-<link rel="import" href="../layout/layout.html">
+<link rel="import" href="../../tangere/tangere.html">
+<link rel="import" href="../../at-core-style-classes/at-core-style-classes.html" />
 
 <dom-module id="component-dispatch-events">
-  <style>
-    .hidden {
-      visibility: hidden;
-    }
-
-    .none {
-      display: none;
-    }
-  </style>
   <template>
-    <div class="vertical layout">
-      <div class="horizontal layout">
+    <style include="at-core-style-classes">
+      .hidden {
+        visibility: hidden;
+      }
+
+      .none {
+        display: none;
+      }
+    </style>
+    <div class="layout-vertical">
+      <div class="layout-horizontal">
         <h4>For components below click event is triggered using HTMLELement.dispatchEvent function</h4>
       </div>
-      <div class="horizontal layout">
-        <div class="flex-2">
+      <div class="layout-horizontal">
+        <div class="layout-flex-2">
           <button id="deVisibleInputTrigger">Trigger visible input</button>
         </div>
-        <div class="flex-4">
+        <div class="layout-flex-4">
           This input is visible
         </div>
-        <div class="flex-6">
+        <div class="layout-flex-6">
           <input id="deVisibleInput" type="file">
         </div>
       </div>
-      <div class="horizontal layout">
-        <div class="flex-2">
+      <div class="layout-horizontal">
+        <div class="layout-flex-2">
           <button id="deHiddenInputTrigger">Trigger "visibility: hidden" input</button>
         </div>
-        <div class="flex-4">
+        <div class="layout-flex-4">
           This input has style="visibility: hidden"
         </div>
-        <div class="flex-6">
+        <div class="layout-flex-6">
           <input id="deHiddenInput" type="file" class="hidden">
         </div>
       </div>
-      <div class="horizontal layout">
-        <div class="flex-2">
+      <div class="layout-horizontal">
+        <div class="layout-flex-2">
           <button id="deNoneInputTrigger">Trigger "display: none" input</button>
         </div>
-        <div class="flex-4">
+        <div class="layout-flex-4">
           This input has style="display: none"
         </div>
-        <div class="flex-6">
+        <div class="layout-flex-6">
           <input id="deNoneInput" type="file" class="none">
         </div>
       </div>
     </div>
-    <div class="vertical layout">
-      <div class="horizontal layout">
+    <div class="layout-vertical">
+      <div class="layout-horizontal">
         <h4>For components below click event is triggered using Polymer utility .fire function</h4>
       </div>
-      <div class="horizontal layout">
-        <div class="flex-2">
+      <div class="layout-horizontal">
+        <div class="layout-flex-2">
           <button id="pfVisibleInputTrigger">Trigger input</button>
         </div>
-        <div class="flex-4">
+        <div class="layout-flex-4">
           This input is visible
         </div>
-        <div class="flex-6">
+        <div class="layout-flex-6">
           <input id="pfVisibleInput" type="file">
         </div>
       </div>
-      <div class="horizontal layout">
-        <div class="flex-2">
+      <div class="layout-horizontal">
+        <div class="layout-flex-2">
           <button id="pfHiddenInputTrigger">Trigger "visibility: hidden" input</button>
         </div>
-        <div class="flex-4">
+        <div class="layout-flex-4">
           This input has style="visibility: hidden"
         </div>
-        <div class="flex-6">
+        <div class="layout-flex-6">
           <input id="pfHiddenInput" type="file" class="hidden">
         </div>
       </div>
-      <div class="horizontal layout">
-        <div class="flex-2">
+      <div class="layout-horizontal">
+        <div class="layout-flex-2">
           <button id="pfNoneInputTrigger">Trigger "display: none" input</button>
         </div>
-        <div class="flex-4">
+        <div class="layout-flex-4">
           This input has style="display: none"
         </div>
-        <div class="flex-6">
+        <div class="layout-flex-6">
           <input id="pfNoneInput" type="file" class="none">
         </div>
       </div>
     </div>
-    <div class="vertical layout">
-      <div class="horizontal layout">
+    <div class="layout-vertical">
+      <div class="layout-horizontal">
         <h4>For components below click event is triggered using HTMLElement.dispatchEvent but event is created using Event constructor</h4>
       </div>
-      <div class="horizontal layout">
-        <div class="flex-2">
+      <div class="layout-horizontal">
+        <div class="layout-flex-2">
           <button id="decVisibleInputTrigger">Trigger input</button>
         </div>
-        <div class="flex-4">
+        <div class="layout-flex-4">
           This input is visible
         </div>
-        <div class="flex-6">
+        <div class="layout-flex-6">
           <input id="decVisibleInput" type="file">
         </div>
       </div>
-      <div class="horizontal layout">
-        <div class="flex-2">
+      <div class="layout-horizontal">
+        <div class="layout-flex-2">
           <button id="decHiddenInputTrigger">Trigger "visibility: hidden" input</button>
         </div>
-        <div class="flex-4">
+        <div class="layout-flex-4">
           This input has style="visibility: hidden"
         </div>
-        <div class="flex-6">
+        <div class="layout-flex-6">
           <input id="decHiddenInput" type="file" class="hidden">
         </div>
       </div>
-      <div class="horizontal layout">
-        <div class="flex-2">
+      <div class="layout-horizontal">
+        <div class="layout-flex-2">
           <button id="decNoneInputTrigger">Trigger "display: none" input</button>
         </div>
-        <div class="flex-4">
+        <div class="layout-flex-4">
           This input has style="display: none"
         </div>
-        <div class="flex-6">
+        <div class="layout-flex-6">
           <input id="decNoneInput" type="file" class="none">
         </div>
       </div>
