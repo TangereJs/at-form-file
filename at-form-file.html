@@ -23,122 +23,122 @@
         @apply --at-form-box-sizing;
       }
 
-        .input {
-            min-height: 1em;
-            -webkit-box-sizing: var(--at-form-box-sizing_-_-webkit-box-sizing);
-            -moz-box-sizing: var(--at-form-box-sizing_-_-moz-box-sizing);
-            box-sizing: var(--at-form-box-sizing_-_box-sizing);
-            -webkit-box-shadow: none;
-            box-shadow: none;
-            background: #ffffff;
-            cursor: text;
-            font-family: var(--at-form-input-common_-_font-family);
-            -webkit-font-smoothing: var(--at-form-input-common_-_-webkit-font-smoothing);
-            font-size: var(--at-form-input-common_-_font-size);
-            font-weight: var(--at-form-input-common_-_font-weight);
-            line-height: var(--at-form-input-common_-_line-height);
-            white-space: var(--at-form-input-common_-_white-space);
-            overflow: var(--at-form-input-common_-_overflow);
-            text-overflow: var(--at-form-input-common_-_text-overflow);
-            display: var(--at-form-input-common_-_display);
-            border: var(--at-form-input-common_-_border);
-            box-shadow: var(--at-form-input-common_-_box-shadow);
-            border-radius: var(--at-form-input-common_-_border-radius);
-            margin: var(--at-form-input-common_-_margin);
-            outline: var(--at-form-input-common_-_outline);
-            -webkit-appearance: var(--at-form-input-common_-_-webkit-appearance);
-            -webkit-tap-highlight-color: var(--at-form-input-common_-_-webkit-tap-highlight-color);
-            padding: var(--at-form-input-common_-_padding);
-            background: var(--at-form-input-common_-_background);
-            color: var(--at-form-input-common_-_color);
-            -webkit-transition: var(--at-form-input-common_-_-webkit-transition);
-            transition: var(--at-form-input-common_-_transition);
-            width: var(--at-form-input-common_-_width);
-            vertical-align: var(--at-form-input-common_-_vertical-align);
-            padding-left: 9px;
-            padding-right: 9px;
-        }
+      .input {
+        min-height: 1em;
+        -webkit-box-sizing: var(--at-form-box-sizing_-_-webkit-box-sizing);
+        -moz-box-sizing: var(--at-form-box-sizing_-_-moz-box-sizing);
+        box-sizing: var(--at-form-box-sizing_-_box-sizing);
+        -webkit-box-shadow: none;
+        box-shadow: none;
+        background: #ffffff;
+        cursor: text;
+        font-family: var(--at-form-input-common_-_font-family);
+        -webkit-font-smoothing: var(--at-form-input-common_-_-webkit-font-smoothing);
+        font-size: var(--at-form-input-common_-_font-size);
+        font-weight: var(--at-form-input-common_-_font-weight);
+        line-height: var(--at-form-input-common_-_line-height);
+        white-space: var(--at-form-input-common_-_white-space);
+        overflow: var(--at-form-input-common_-_overflow);
+        text-overflow: var(--at-form-input-common_-_text-overflow);
+        display: var(--at-form-input-common_-_display);
+        border: var(--at-form-input-common_-_border);
+        box-shadow: var(--at-form-input-common_-_box-shadow);
+        border-radius: var(--at-form-input-common_-_border-radius);
+        margin: var(--at-form-input-common_-_margin);
+        outline: var(--at-form-input-common_-_outline);
+        -webkit-appearance: var(--at-form-input-common_-_-webkit-appearance);
+        -webkit-tap-highlight-color: var(--at-form-input-common_-_-webkit-tap-highlight-color);
+        padding: var(--at-form-input-common_-_padding);
+        background: var(--at-form-input-common_-_background);
+        color: var(--at-form-input-common_-_color);
+        -webkit-transition: var(--at-form-input-common_-_-webkit-transition);
+        transition: var(--at-form-input-common_-_transition);
+        width: var(--at-form-input-common_-_width);
+        vertical-align: var(--at-form-input-common_-_vertical-align);
+        padding-left: 9px;
+        padding-right: 9px;
+      }
 
-            .input.at-form-file {
-                font-family: var(--at-form-input-common_-_font-family);
-                -webkit-font-smoothing: var(--at-form-input-common_-_-webkit-font-smoothing);
-            }
+      .input.at-form-file {
+        font-family: var(--at-form-input-common_-_font-family);
+        -webkit-font-smoothing: var(--at-form-input-common_-_-webkit-font-smoothing);
+      }
 
-                .input.at-form-file > *.at-form-file {
-                    vertical-align: baseline;
-                    display: -moz-inline-stack;
-                    display: inline-block;
-                    zoom: 1;
-                    display: inline;
-                }
+      .input.at-form-file>*.at-form-file {
+        vertical-align: baseline;
+        display: -moz-inline-stack;
+        display: inline-block;
+        zoom: 1;
+        display: inline;
+      }
 
-                .input.at-form-file > .input.at-form-file {
-                    display: inline-block !important;
-                    padding: 0 !important;
-                    min-height: 0 !important;
-                    max-height: none !important;
-                    max-width: 100% !important;
-                    margin: 0 !important;
-                    text-indent: 0 !important;
-                    line-height: inherit !important;
-                    -webkit-user-select: auto !important;
-                }
+      .input.at-form-file>.input.at-form-file {
+        display: inline-block !important;
+        padding: 0 !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        text-indent: 0 !important;
+        line-height: inherit !important;
+        -webkit-user-select: auto !important;
+      }
 
-            .input > div {
-                cursor: pointer;
-                @apply(--at-text-selected);
-                border: 0;
-                float: left;
-            }
+      .input>div {
+        cursor: pointer;
+        @apply(--at-text-selected);
+        border: 0;
+        float: left;
+      }
 
-        .item {
-            cursor: pointer;
-            margin: 0 3px 3px 0;
-            padding: 1px 3px 1px 8px;
-            vertical-align: text-top;
+      .item {
+        cursor: pointer;
+        margin: 0 3px 3px 0;
+        padding: 1px 3px 1px 8px;
+        vertical-align: text-top;
 
-            color: var(--at-text-selected_-_color);
-            background: var(--at-text-selected_-_background);
-            border: 0;
+        color: var(--at-text-selected_-_color);
+        background: var(--at-text-selected_-_background);
+        border: 0;
 
-            position: relative;
-            padding-right: 18px !important;
+        position: relative;
+        padding-right: 18px !important;
 
-            -webkit-border-radius: var(--at-form-border-radius2222_-_-webkit-border-radius);
-            -moz-border-radius: var(--at-form-border-radius2222_-_-moz-border-radius);
-            border-radius: var(--at-form-border-radius2222_-_border-radius);
-        }
+        -webkit-border-radius: var(--at-form-border-radius2222_-_-webkit-border-radius);
+        -moz-border-radius: var(--at-form-border-radius2222_-_-moz-border-radius);
+        border-radius: var(--at-form-border-radius2222_-_border-radius);
+      }
 
-        #fileContainer a{
-            z-index: 1;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 12px;
-            color: inherit;
-            text-decoration: none;
-        }
+      #fileContainer a {
+        z-index: 1;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 12px;
+        color: inherit;
+        text-decoration: none;
+      }
 
-        .remove.at-form-file {
-            position: absolute;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            width: 16px;
-            vertical-align: middle;
-            font-weight: bold;
-            border-left: 1px solid rgba(0, 0, 0, 0);
-            -webkit-border-radius: var(--at-form-border-radius0220_-_-webkit-border-radius);
-            -moz-border-radius: var(--at-form-border-radius0220_-_-moz-border-radius);
-            border-radius: var(--at-form-border-radius0220_-_border-radius);
-            -webkit-box-sizing: var(--at-form-box-sizing_-_-webkit-box-sizing);
-            -moz-box-sizing: var(--at-form-box-sizing_-_-moz-box-sizing);
-            box-sizing: var(--at-form-box-sizing_-_box-sizing);
-        }
+      .remove.at-form-file {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 16px;
+        vertical-align: middle;
+        font-weight: bold;
+        border-left: 1px solid rgba(0, 0, 0, 0);
+        -webkit-border-radius: var(--at-form-border-radius0220_-_-webkit-border-radius);
+        -moz-border-radius: var(--at-form-border-radius0220_-_-moz-border-radius);
+        border-radius: var(--at-form-border-radius0220_-_border-radius);
+        -webkit-box-sizing: var(--at-form-box-sizing_-_-webkit-box-sizing);
+        -moz-box-sizing: var(--at-form-box-sizing_-_-moz-box-sizing);
+        box-sizing: var(--at-form-box-sizing_-_box-sizing);
+      }
 
-            .remove.at-form-file:hover {
-                background: rgba(0, 0, 0, 0.05);
-            }
+      .remove.at-form-file:hover {
+        background: rgba(0, 0, 0, 0.05);
+      }
 
       /*
         First in at-theme/form.html there are input-group and input-group-addon classes which we can't use because they do not work recursively
@@ -149,6 +149,7 @@
         and input-group-addon-1 display block allows the addon to have enough space
         The same logic is applied to .input-group-addon-1.icon-with-label, .icon and span that contains the label text
       */
+
       .at-content-container.input-group-1 {
         display: flex;
         flex-direction: row;
@@ -201,7 +202,7 @@
   'use strict';
   Polymer({
     is: 'at-form-file',
-    behaviors: [ Tangere.behaviors.i18n, Tangere.behaviors.formUIGeneric, Tangere.behaviors.AtFormFileInputValidation ],
+    behaviors: [Tangere.behaviors.i18n, Tangere.behaviors.formUIGeneric, Tangere.behaviors.AtFormFileInputValidation],
     properties: {
       /**
        * Label for the element
@@ -438,7 +439,7 @@
       }
     },
 
-    validate: function (showError) {
+    validate: function(showError) {
       if (showError === undefined) { showError = this.autoValidate; }
 
       var validationResult = this._validateBaseData();
@@ -448,7 +449,7 @@
       }
 
       validationResult = this._validateData(this, this.value, this.T.bind(this));
-      if(showError) this._handleValidationResult(validationResult);
+      if (showError) this._handleValidationResult(validationResult);
 
       return validationResult.isValid;
     },
@@ -485,7 +486,7 @@
         try {
           parsedObj = JSON.parse(oldValue);
           oldValue = parsedObj;
-        } catch(e) {
+        } catch (e) {
           oldValue = {};
           console.log(e);
         }
@@ -562,7 +563,7 @@
       }
     },
 
-    set files(newValue) {},
+    set files(newValue) { },
 
     _selectFileClickHandler: function() {
       if (this.disabled) { return; }
