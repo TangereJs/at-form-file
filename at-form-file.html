@@ -15,12 +15,12 @@
     <style include="at-form-common"></style>
     <style>
       :host {
-        @apply(--at-form-host);
-        @apply(--at-form-box-sizing);
+        @apply --at-form-host;
+        @apply --at-form-box-sizing;
       }
 
       :host * {
-        @apply(--at-form-box-sizing);
+        @apply --at-form-box-sizing;
       }
 
         .input {
@@ -454,6 +454,8 @@
     },
 
     _updateUIValidState: function(isValid) {
+      if (!this.$) return;
+
       var label = this.$.label;
       this.toggleClass('error', !isValid, label);
       var contentContainer = this.$.contentContainer;
