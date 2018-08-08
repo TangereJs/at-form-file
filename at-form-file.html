@@ -723,13 +723,13 @@
       removeBtn.setAttribute('title', "Remove");
       removeBtn.setAttribute('tabindex', "-1");
       removeBtn.innerHTML = "&times;";
-      removeBtn.className = "remove";
+      this._setClassList(removeBtn, "remove");
 
       //var fileNameWrapper = document.createElement('span');
       //fileNameWrapper.innerText = fileName;
 
       var fileTag = document.createElement('div');
-      fileTag.className = "item";
+      this._setClassList(fileTag, "item");
       fileTag.setAttribute('file-name', fileName);
       fileTag.setAttribute('file-url', fileUrl);
       fileTag.appendChild(downloadBtn);
