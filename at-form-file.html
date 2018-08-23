@@ -153,32 +153,33 @@
       .at-content-container.input-group-1 {
         display: flex;
         flex-direction: row;
+        height: 38px;
       }
 
       .at-content-container.input-group-1 .input.items {
         flex: 1;
       }
 
-      .at-content-container.input-group-1 .input-group-addon-1 {
-        display: block;
-      }
-
-      .at-content-container.input-group-1 .input-group-addon-1.icon-with-label {
-        display: flex;
-        @apply(--at-form-input-padding);
-        cursor: pointer;
-      }
-
-      .at-content-container.input-group-1 .input-group-addon-1.icon-with-label .icon {
-        display: block;
-      }
-
-      .at-content-container.input-group-1 .input-group-addon-1.icon-with-label span {
-        padding-left: 6px;
-      }
-
       #selectFileButton.disabled {
         pointer-events: none;
+      }
+
+      .at-button {
+        margin: 0 2px;
+        outline: none;
+      }
+      
+      .at-button:focus {
+        outline: none;
+      }
+
+      .at-button .at-button-icon {
+        vertical-align: middle;
+      }
+
+      .at-button .at-button-label {
+        vertical-align: middle;
+        margin-left: 2px;
       }
     </style>
 
@@ -186,10 +187,11 @@
       <iron-label id="label" for="selectFileButton">{{label}}</iron-label>
       <div id="contentContainer" class="at-content-container input-group-1">
         <div id="fileContainer" class="input items"></div>
-        <div type="button" id="selectFileButton" class="input-group-addon-1 icon-with-label" on-click="_selectFileClickHandler" disabled$="{{disabled}}">
-          <at-carbon-icon id="buttonIcon" icon="{{icon}}" class="icon"></at-carbon-icon>
-          <span id="buttonIconText">Select a file</span>
-        </div>
+
+        <at-carbon-button id="selectFileButton" on-click="_selectFileClickHandler" disabled$="[[disabled]]" class="at-button">
+          <at-carbon-icon icon="[[icon]]" class="at-button-icon"></at-carbon-icon>
+          <iron-label id="selectButtonText" class="at-button-label">{{_getLocalized("Select a file")}}</iron-label>
+        </at-carbon-button>
       </div>
       <div id="hint"></div>
       <div class="hidden">
@@ -404,6 +406,10 @@
       xtype: "file",
       icon: "now:upload"
     }],
+
+    _getLocalized: function(title) {
+      return this.T(title);
+    },
 
     _hideLabelChanged: function(newValue, oldValue) {
       this.toggleClass("hidden", newValue, this.$.label);
