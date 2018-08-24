@@ -165,7 +165,9 @@
         var iconName = 'lorem ipsum';
         var expectedName = 'lorem ipsum';
         input.icon = iconName;
-        assert.equal(input.$.buttonIcon.icon, expectedName, 'at-form-file.icon is not set correctly');
+
+        var carbonIcon = Polymer.dom(input.root).querySelector('at-carbon-icon');
+        assert.equal(carbonIcon.icon, expectedName, 'at-form-file.icon is not set correctly');
       });
 
     });
